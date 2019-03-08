@@ -21,6 +21,8 @@
         <option value={{this.tag}}>{{this.tag}}</option>
       {{/each}}
     </select>
+    <input type='hidden' name='packages' value="{{packages}}">
+    <input type='hidden' name='latexcode' value="{{latexcode}}">
     <input type='submit' value='Create exercise!'>
   </form>
 </div>

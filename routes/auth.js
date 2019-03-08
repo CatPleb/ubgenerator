@@ -19,7 +19,7 @@ router.get('/callback', function (req, res, next) {
     req.logIn(user, function (err) {
       if (err) { return next(err); }
       user['groups'] = user['_json'][String('https://ubgenerator:eu:auth0:com/claims/groups')];
-      console.log(util.inspect(user, false, null, true));
+      //console.log(util.inspect(user, false, null, true));
       const returnTo = req.session.returnTo;
       delete req.session.returnTo;
       res.redirect(returnTo || '/user');
