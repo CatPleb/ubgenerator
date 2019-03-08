@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>{{ title }}</title>
+  <link rel='stylesheet' href='/stylesheets/style.css'>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+<div id='all'>
+
+  <div class="topnav">
+    <a id='a' href="/">Home</a>
+    <a id='b' href="/search?selecttag=All">Search</a>
+    <a id='c' href="/create">Create</a>
+    <a id='d' href="/about">About</a>
+    <a id='e' href="/contact">Contact</a>
+  </div> 
+
+
+  <div class='usernav'>
+    {{#if user}}
+      <a id='logout' href='/logout'>Log Out</a>
+      <a id='profile' href='/user'>{{user.nickname}}</a>
+    {{else}}
+      <a id='login' href='/login'>Log In</a>
+    {{/if}}
+  </div>
+
+
+
+
+  {{{ body }}}
+
+
+</div>
+  <script>
+
+    /* Changes the highlighted top navigation symbol according to the site the user is on */
+    const b = '/search';
+    const c = '/create';
+    const d = '/about';
+    const e = '/contact';
+    if (window.location.pathname == '/') {
+      document.getElementById('a').className = 'active';
+
+      document.getElementById('b').className = '';
+      document.getElementById('c').className = '';
+      document.getElementById('d').className = '';
+      document.getElementById('e').className = '';
+    } else if (window.location.pathname.indexOf(b) != -1) {
+      document.getElementById('b').className = 'active';
+
+      document.getElementById('a').className = '';
+      document.getElementById('c').className = '';
+      document.getElementById('d').className = '';
+      document.getElementById('e').className = '';
+    } else if (window.location.pathname.indexOf(c) != -1) {
+      document.getElementById('c').className = 'active';
+
+      document.getElementById('a').className = '';
+      document.getElementById('b').className = '';
+      document.getElementById('d').className = '';
+      document.getElementById('e').className = '';
+    } else if (window.location.pathname.indexOf(d) != -1) {
+      document.getElementById('d').className = 'active';
+
+      document.getElementById('a').className = '';
+      document.getElementById('b').className = '';
+      document.getElementById('c').className = '';
+      document.getElementById('e').className = '';
+    } else if (window.location.pathname.indexOf(e) != -1) {
+      document.getElementById('e').className = 'active';
+
+      document.getElementById('a').className = '';
+      document.getElementById('b').className = '';
+      document.getElementById('c').className = '';
+      document.getElementById('d').className = '';
+    }
+  </script>
+</body>
+</html>

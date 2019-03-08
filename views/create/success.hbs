@@ -1,0 +1,18 @@
+<h1>SUCCESS</h1>
+
+<p>You successfully created the exercise. It looks like this:</p>
+<br>
+<p>Name: {{exercise_name}}</p>
+<p>Tag: {{tag}}</p>
+
+<div id='div_png'>
+  <img id='png_preview' src='{{png}}' alt='compiled LaTeX code'>
+</div>
+<br>
+<form action='/' method='get'>
+  <input type='submit' value='Go to Frontpage'>
+</form>
+<form action='/search' method='get'>
+  <input type='hidden' name='selecttag' value='All'>
+  <input type='submit' value='Go to Search/All'>
+</form>

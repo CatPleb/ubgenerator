@@ -1,0 +1,12 @@
+<h1>{{ title }}</h1>
+
+<img src='{{user.picture}}'>
+<p>Welcome {{user.nickname}}</p>
+<p>Email: {{user.displayName}}</p>
+<p>Your groups:</p>
+{{#each user.groups}}
+  <p>{{@index}}: {{this}}</p>
+{{/each}}
+<br>
+<p>If you want to reset your password, please log out and when logging in again, 
+  choose the 'Forgot password' option.</p>

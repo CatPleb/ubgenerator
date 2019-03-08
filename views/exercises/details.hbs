@@ -1,0 +1,27 @@
+<br>
+{{#if exercise_error}}
+  <h2>{{exercise_error}}</h2>
+{{else}}
+
+  {{#if exercise}}
+
+    {{#with exercise}}
+    <div class='exercises_details_div'>
+      <h1>{{this.name}}</h1>
+      <div class='exercises_details_png_border'>
+        <img class='exercises_details_png' src={{this.png}}>
+      </div>
+      <p>Tag: {{this.tag}}</p>
+      <br>
+      <form action='../delete' method='post'>
+        <input type='submit' onclick='return confirm("Are you sure to delete this exercise?");' value='Delete Exercise'>
+        <input type='hidden' name='hidden_id' value={{this.public_id}}>
+      </form>
+    </div>
+    {{/with}}
+
+
+  {{else}}
+    <p>Exercise ID missing</p>
+  {{/if}}
+{{/if}}

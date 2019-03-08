@@ -1,0 +1,18 @@
+<h2>{{error}}</h2>
+
+<p>Something went wrong. Click 'Retry' to try again or go back to the frontpage.</p>
+
+<form action='/create/engrave' method='post'>
+  <input type='hidden' name='exercise_name' value={{exercise_name}}>
+  <input type='hidden' name='png_string' value={{png}}>
+  <input type='hidden' name='tagselect' value={{tag}}>
+  <input type='submit' value='Retry'>
+</form>
+
+<form action='/' method='get'>
+  <input type='submit' value='Go to Frontpage'>
+</form>
+<form action='/search' method='get'>
+  <input type='hidden' name='selecttag' value='All'>
+  <input type='submit' value='Go to Search/All'>
+</form>

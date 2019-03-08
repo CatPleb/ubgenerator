@@ -1,0 +1,35 @@
+<h1>WIP search site</h1>
+
+
+<div id='div_search'>
+  <form action='/search' method='get'>
+    
+    <select name='selecttag'>
+        <option value='All'>All</option>
+      {{#each taglist}}
+        <option value={{this}}>{{this}}</option>
+      {{/each}}
+    </select>
+
+    <input type='submit' value='Search!'>
+  </form>
+</div>
+
+{{#if selectedtag}}
+<div id='search_result'>
+  <h3>Results for tag: "{{selectedtag}}"</h3>
+  {{#each result}}
+    <div class='search_result_exercise'>
+      <p><b>{{@index}}: {{this.name}}</b></p>
+      <div class='search_result_png_border'>
+        <img class='search_result_png' src={{this.png}}>
+      </div>
+      <p>Tag: {{this.tag}}</p>
+      <form action={{this.public_id}} method='get'>
+        <input type='submit' id='exercise_link' value='Details'>
+      </form>
+    </div>
+    <br>
+  {{/each}}
+</div>
+{{/if}}

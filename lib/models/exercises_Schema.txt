@@ -1,0 +1,3 @@
+Because of many different input arguments only living in create.js, the exercises_schema gets defined in
+create.js , line 106 as >var exercise< (use ctrl+f)
+Please change accordingly to exercises_model or it won't work.

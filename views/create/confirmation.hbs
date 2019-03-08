@@ -1,0 +1,26 @@
+<h1>Confirmation Page</h1>
+
+{{#if create_error}}
+  <h3>Your code still contains the following error:</h3><br>
+  <p>{{create_error}}</p>
+{{/if}}
+
+<div id='preview'>
+  <form action='/create/engrave' method='post' autocomplete='off'>
+    Give your exercise a name:<br>
+    <input type='text' name='exercise_name' size='60' required><br><br>
+    Preview of your exercise:<br><br>
+    <div id='div_png'>
+      <img id='png_preview' src={{png}} onerror="'Something went wrong. Please go back to the previous page and do not submit your exercise now.';">
+      <input type='hidden' name='png_string' value={{png}}>
+    </div>
+    <br>
+    <p>Select the <u>most</u> accurate tag for your exercise: </p>
+    <select name='tagselect'>
+      {{#each hierarchy}}
+        <option value={{this.tag}}>{{this.tag}}</option>
+      {{/each}}
+    </select>
+    <input type='submit' value='Create exercise!'>
+  </form>
+</div>

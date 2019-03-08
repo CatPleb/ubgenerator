@@ -1,0 +1,67 @@
+<h1>Latex Compiler</h1>
+
+<div name='input' id='input'>
+    <form action='/create/confirmation' method='post' id='codeform'>
+        <h3>Input latex packages code:</h3>
+        <p>\usepackage[utf8]{inputenc}<br>
+        \usepackage{amsmath}<br>
+        \usepackage{amsthm}<br>
+        \usepackage{amssymb}<br>
+        \usepackage[ngerman]{babel}</p>
+        <textarea name='packages' id='packages' class='input' formid='codeform' rows='5'>{{lastpackages}}</textarea>
+        <h3>Input latex code:</h3>
+        <textarea name='latexcode' id='latexcode' class='input' formid='codeform' rows='20' wrap='on'>{{lastcode}}</textarea>
+        <br>
+        <button type='button' id='refresh_button' onclick='load(i++)'>Refresh image!</button>
+        <input type='submit' id='submit_button' value='Submit Exercise'>
+    </form>
+</div>
+
+<div id='output'>
+        <h3 id='outputtext'>Compiled Latex:</h3>
+        <img id='latexcode_png' src='' onerror=''>
+        <p id='errorp'></p>
+</div>
+
+
+<script>
+
+    var i = 0;
+    var j = 0;
+    var change = 0;
+    var intervalID = window.setInterval(function() {        // recompile picture every 0.5 seconds if something changed
+        if (change == 1) {
+            load(i++);
+            change = 0;
+        }
+    }, 1000);
+    $('#packages').bind('input propertychange', ()=>{change = 1;});
+    $('#latexcode').bind('input propertychange', ()=>{change = 1;});
+
+    function load(id) {
+        console.log('load'+id);
+        if($('#latexcode').val().trim().length >= 1) {      // check if textarea is empty
+            $.ajax({
+                type: 'POST',
+                url: '/create/compile',
+                data: $('#codeform').serialize(),
+                success: data => {
+                    if(id>=j){
+                        if (data['res']) {
+                            $("#latexcode_png").attr('src', data['res']);
+                            j = id;
+                        }
+                        if (data['err']) {
+                            $("#errorp").html('<b>ERROR:</b><br>'+data['err']);
+                        } else {
+                            $('#errorp').html('');
+                        }
+                    }
+                },
+            });
+        } else {
+            $("#latexcode_png").attr('src', '');
+            j = id;
+        }
+    }
+</script>
