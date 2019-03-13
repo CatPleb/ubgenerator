@@ -16,7 +16,7 @@
     "express-session": "^1.15.6",
     "express-validator": "^5.3.0",
     "http-errors": "~1.6.2",
-    "mongoose": "^5.2.9",
+    "mongoose": "^5.4.19",
     "mongoose-tree-materialized": "^0.1.9",
     "morgan": "~1.9.0",
     "npm": "^6.4.1",
