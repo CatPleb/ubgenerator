@@ -15,7 +15,7 @@ if (result.error) {
   throw result.error;
 }
 console.log(result.parsed);
-if (process.env.OPERATING_SYSTEM != ('windows' || 'linux')) {
+if (!(process.env.OPERATING_SYSTEM == ('windows' || 'linux'))) {
   throw new Error('CHANGE OPERATING_SYSTEM IN .env FILE TO YOUR OS.');
 }
 

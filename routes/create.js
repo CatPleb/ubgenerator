@@ -7,7 +7,6 @@ var shortid = require('shortid');
 
 /* Mongoose stuff and models */
 var mongoose = require('mongoose');
-var materializedPlugin = require('mongoose-tree-materialized');
 mongoose.connect('mongodb://localhost:27017/public');
 
 var Exercises = require('../lib/models/exercises_model');
