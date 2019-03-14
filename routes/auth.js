@@ -30,7 +30,7 @@ router.get('/callback', function (req, res, next) {
 // Perform session logout and redirect to homepage
 router.get('/logout', (req, res) => {
   req.logout();
-  res.redirect('https://' + process.env.AUTH0_DOMAIN+'/v2/logout?returnTo=http%3A%2F%2Flocalhost%3A8000/');
+  res.redirect('https://' + process.env.AUTH0_DOMAIN+'/v2/logout?returnTo='+process.env.WEBSITE_DOMAIN);
 });
 
 
