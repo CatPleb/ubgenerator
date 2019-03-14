@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* Mongoose stuff and models */
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/public');
+mongoose.connect(process.env.MONGOOSE_ADDRESSE);
 
 var Exercises = require('../lib/models/exercises_model');
 var Hierarchy = require('../lib/models/hierarchy_model');
