@@ -1,0 +1,35 @@
+<h1>Create Tags:</h1>
+
+{{#each create_error}}
+  <h3>{{this}}</h3>
+{{/each}}
+
+<form action='/database/engrave_new_tag' method='post' onsubmit='return confirm("Tag changes are final! Be sure you put in the right information!");'>
+  New tag:<br>
+  <input type='text' name='tag_name' required><br>
+  Attention: Write tags with an upper case first letter and in german for now!
+  <br><br>
+  Select parent tags:<br>
+  <select class='select_relationships' name='parent_tags' multiple='multiple'>
+    {{#each tagList}}
+      <option value={{this}}>{{this}}</option>
+    {{/each}}
+  </select>
+  <br><br>
+  Select child tags:<br>
+  
+  <select class='select_relationships' name='child_tags' multiple='multiple'>
+    {{#each tagList}}
+      <option value={{this}}>{{this}}</option>
+    {{/each}}
+  </select>
+  <br><br>
+  <input type='submit' value='Create new tag!'>
+</form>
+
+
+<script>
+  $(document).ready(function() {
+      $('.select_relationships').select2();
+  });
+</script>

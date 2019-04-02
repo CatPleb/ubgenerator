@@ -13,7 +13,7 @@ var Exercises = require('../lib/models/exercises_model');
 var Hierarchy = require('../lib/models/hierarchy_model');
 
 // my functions
-var my = require('../lib/middleware/compile_code');
+var my = require('../lib/my modules/compile_code');
 var secured = require('../lib/middleware/secured');
 
 

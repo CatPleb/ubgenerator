@@ -10,3 +10,14 @@
 <br>
 <p>If you want to reset your password, please log out and when logging in again, 
   choose the 'Forgot password' option.</p>
+<br>
+<br>
+
+
+
+{{#if admin}}
+  <h3>Admin Area:</h3>
+  <form action='/database/' method='post'>
+    <input type='submit' value='Database Management'>
+  </form>
+{{/if}}

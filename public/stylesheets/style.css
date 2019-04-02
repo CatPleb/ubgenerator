@@ -18,6 +18,7 @@ div#all {
     position: fixed;
     top: 0;
     left: 50px;
+    z-index: 10;
   }
 
   /* Style the links inside the navigation bar */
@@ -198,3 +199,6 @@ button:hover {
     padding-left: 10px;
   }
 
+  .mainselect {
+    width: 40%;
+  }

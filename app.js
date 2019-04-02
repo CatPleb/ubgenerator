@@ -61,8 +61,8 @@ var createRouter = require('./routes/create');
 var searchRouter = require('./routes/search');
 var exercisesRouter = require('./routes/exercises');
 var authRouter = require('./routes/auth');
-var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var databaseRouter = require('./routes/database');
 
 var userInViews = require('./lib/middleware/userInViews');
 
@@ -106,6 +106,7 @@ app.use('/exercises', exercisesRouter);
 app.use('/', authRouter);
 app.use('/', indexRouter);
 app.use('/', usersRouter);
+app.use('/database', databaseRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

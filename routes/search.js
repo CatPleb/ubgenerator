@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var util = require('util');
+
 /* Mongoose stuff and models */
 var mongoose = require('mongoose');
 mongoose.connect(process.env.MONGOOSE_ADDRESSE);
@@ -30,7 +32,9 @@ router.get('/', async function(req, res, next) {
   if (!req.session.taglist) {
     await tagList(req);         // create a list with all possible tags
   }
-  if (selectedtag == 'All') {
+  if (selectedtag == undefined) {
+    res.render('search/search', {taglist: req.session.taglist});
+  } else if (selectedtag.indexOf('All') >= 0) {
 
     Exercises.find().then(function(result) {
       var public_result = [];
@@ -50,14 +54,21 @@ router.get('/', async function(req, res, next) {
   } else if (selectedtag) {
 
     /* Get ids from searchtag and all children */
-    Hierarchy.findOne({ tag: selectedtag }, function(err, doc) {
-      var idArray = [doc._id];
-      doc.getChildren(function(err,childrenArray) {
-        for (i = 0; i < childrenArray.length; i++) {
-          idArray.push(childrenArray[i]._id);
-        }
-        /* Now search for every exercise which has one of those ids in it */
-        Exercises.find( { tag_id: { $in: idArray }}, function(err,result) {         // EXERCISE MODEL tag_id
+    Hierarchy.find({ tag: { $in: selectedtag }}, async function(err, doc) {
+      
+      /* Now search for every exercise which has one of those ids in it */
+      var promises_tags = selectedtag.map(async function(stag) {
+        return Hierarchy.find({ tag: stag });
+      });
+      
+      Promise.all(promises_tags).then((db_tags) => {
+        
+        newtagList = []
+        db_tags.forEach((db_tag) => {
+          newtagList = newtagList.concat(db_tag[0].subtree_tags);
+        })
+
+        Exercises.find( { tag: { $in: newtagList }}, function(err,result) {
 
           var public_result = [];
           for (i=0; i<result.length; i++) {
@@ -72,8 +83,9 @@ router.get('/', async function(req, res, next) {
           }
           res.render('search/search', {result: public_result, taglist: req.session.taglist, selectedtag: selectedtag});
         });
-      });
+      })  
     });
+      
 
   } else {
     res.render('search/search', {taglist: req.session.taglist});
