@@ -20,6 +20,7 @@ router.get('/id/:exercise_id', function(req, res, next) {
   Exercises.findOne( { public_id: req.params.exercise_id }, function(err, exercise) {
     if (err) res.render('exercises/details', {exercise_error: 'ERROR: Exercise not found!'});
     else {
+      console.log(exercise);
       public_exercise = {
         public_id: exercise.public_id,
         name: exercise.name,

@@ -29,7 +29,6 @@ function tagList(req) {
 /* show all exercises page */
 router.get('/', async function(req, res, next) {
   var selectedtag = my.convert2array(req.query.selecttag);
-  console.log(selectedtag);
 
   if (!req.session.taglist) {
     await tagList(req);         // create a list with all possible tags
