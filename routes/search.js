@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
+var my = require('../lib/my modules/compile_code');
 var util = require('util');
 
 /* Mongoose stuff and models */
@@ -27,7 +28,8 @@ function tagList(req) {
 
 /* show all exercises page */
 router.get('/', async function(req, res, next) {
-  var selectedtag = req.query.selecttag;
+  var selectedtag = my.convert2array(req.query.selecttag);
+  console.log(selectedtag);
 
   if (!req.session.taglist) {
     await tagList(req);         // create a list with all possible tags

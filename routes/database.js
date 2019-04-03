@@ -2,6 +2,7 @@ var express = require('express');
 var adminsecured = require('../lib/middleware/adminsecured');
 var router = express.Router();
 
+var my = require('../lib/my modules/compile_code');
 var util = require('util');
 
 /* Mongoose stuff and models */
@@ -33,15 +34,6 @@ var two_arrays_same_element = function(arr1, arr2) {
   return false
 };
 
-var convert2array = function(maybearray) {
-  if (maybearray == undefined) {
-    return [];
-  }
-  if (!(Array.isArray(maybearray))) {
-    return [maybearray];
-  }
-  return maybearray;
-}
 
 var shorten = function(arr, num) {
   newarr = []
@@ -181,8 +173,8 @@ router.post('/engrave_new_tag', adminsecured(), async function(req,res,next) {
   console.log('Parent tags: '+util.inspect(req.body.parent_tags, false, null, true));
   console.log('Child tags: '+util.inspect(req.body.child_tags, false, null, true));
 
-  parent_tags = convert2array(req.body.parent_tags);
-  child_tags = convert2array(req.body.child_tags);
+  parent_tags = my.convert2array(req.body.parent_tags);
+  child_tags = my.convert2array(req.body.child_tags);
 
   Hierarchy.find().then(async function(result) {
     tagList = get_tags(result);
