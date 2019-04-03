@@ -6,7 +6,7 @@ var util = require('util');
 
 /* Mongoose stuff and models */
 var mongoose = require('mongoose');
-mongoose.connect(process.env.MONGOOSE_ADDRESSE);
+mongoose.connect(process.env.MONGOOSE_ADDRESSE, {useNewUrlParser: true});
 
 var Exercises = require('../lib/models/exercises_model');
 var Hierarchy = require('../lib/models/hierarchy_model');

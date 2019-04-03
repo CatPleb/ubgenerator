@@ -7,7 +7,7 @@ var shortid = require('shortid');
 
 /* Mongoose stuff and models */
 var mongoose = require('mongoose');
-mongoose.connect(process.env.MONGOOSE_ADDRESSE);
+mongoose.connect(process.env.MONGOOSE_ADDRESSE, {useNewUrlParser: true});
 
 var Exercises = require('../lib/models/exercises_model');
 var Hierarchy = require('../lib/models/hierarchy_model');
@@ -63,32 +63,35 @@ router.post('/engrave', secured(), function(req, res, next) {
 
   Exercises.findOne({name: exercise_name, png: base64png}, function(err, duplicate) {
     if (err || duplicate) {
-      res.render('create/nosuccess', {error: 'Error: That exercise already exists.', exercise_name: exercise_name, png: base64png, tag: extag});
+      res.render('create/nosuccess', {error: 'ERROR: That exercise already exists.', exercise_name: exercise_name, png: base64png, tag: extag});
     } else {
-      Hierarchy.findOne({tag: extag}, function(err, doc) {
-        var exercise = {                  // EXERCISE MODEL DEFINITION; CHANGE IF MODEL/SCHEMA CHANGED!!!
-          public_id: shortid.generate(),
-          name: exercise_name,
-          packages: packages,
-          code: latexcode,
-          png: base64png,
-          author: req.user.nickname,
-          tag: extag,
-          tag_id: doc._id,
-        };
-      
-        var data = new Exercises(exercise);
-        data.save(function (err, saveddata) {
-          if (err) {
-            res.render('create/nosuccess', {error: err.message, exercise_name: exercise_name, png: base64png, tag: extag});
-          }
-          Exercises.findById(saveddata._id, function(err, exercise) {           //when getting >>TypeError: Cannot read property '_id' of undefined<< var exercise 15 lines ahead does not fit into database schema
-            res.render('create/success', {exercise_name: exercise.name, png: exercise.png, tag: exercise.tag});
-          }).catch(findByIdError => {
-            console.log(findByIdError);
-            res.render('create/nosuccess', {error: findByIdError, exercise_name: 'Database Exercise Schema Error, please tell admin! (preferably with what exactly you did)'});
+      Hierarchy.findOne({tag: extag}, function(tag_err, doc) {
+        if (tag_error) {
+          res.render('create/nosuccess', {error: tag_error, exercise_name: exercise_name, png: base64png, tag: extag});
+        } else {
+          var exercise = {                  // EXERCISE MODEL DEFINITION; CHANGE IF MODEL/SCHEMA CHANGED!!!
+            public_id: shortid.generate(),
+            name: exercise_name,
+            packages: packages,
+            code: latexcode,
+            png: base64png,
+            author: req.user.nickname,
+            tag: extag,
+          };
+        
+          var data = new Exercises(exercise);
+          data.save(function (err, saveddata) {
+            if (err) {
+              res.render('create/nosuccess', {error: err.message, exercise_name: exercise_name, png: base64png, tag: extag});
+            }
+            Exercises.findById(saveddata._id, function(err, exercise) {           //when getting >>TypeError: Cannot read property '_id' of undefined<< var exercise 15 lines ahead does not fit into database schema
+              res.render('create/success', {exercise_name: exercise.name, png: exercise.png, tag: exercise.tag});
+            }).catch(findByIdError => {
+              console.log(findByIdError);
+              res.render('create/nosuccess', {error: findByIdError, exercise_name: 'Database Exercise Schema Error, please tell admin! (preferably with what exactly you did)'});
+            });
           });
-        });
+        }
       });
     }
   });
