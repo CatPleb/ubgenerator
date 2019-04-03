@@ -74,6 +74,7 @@ router.get('/', async function(req, res, next) {
           var public_result = [];
           for (i=0; i<result.length; i++) {
 
+            console.log(result[i].name);
             public_result.push({
               name: result[i].name,
               png: result[i].png,
