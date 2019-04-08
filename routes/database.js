@@ -89,22 +89,31 @@ function arrayUnique(array) {
 // recursively updates upper tags' subtree_tags to include the new tag
 var update_subtree_tags_top = async function(newtagList, parentId) {
   return new Promise(async function(resolve,reject) {
-    syncfindOneById(parentId).then((parent) => {
+    syncfindOneById(parentId).then(async function(parent) {
+      console.log('Updating (parent): '+parent.tag);
       var updated_tags = [];
       var promise_loop = newtagList.map(async function (newtag) {
         if (parent.subtree_tags.indexOf(newtag) == -1) {
-          return parent.subtree_tags.push(newtag);
+          parent.subtree_tags.push(newtag);
         }
       });
-      Promise.all(promise_loop).then((res) => {
+      var promise_my_concat = new Promise(function(resolve,reject) {
+        updated_tags = [];
+        parent.parentId.forEach(async function(parId,index) {
+          console.log(parent.tag+': >'+index+'<');
+          updated_tags = updated_tags.concat(await update_subtree_tags_top(newtagList, parId));
+          if (index == parentId.length-1) {
+            resolve(updated_tags);
+          }
+        });
+      });
+      Promise.all([promise_loop,promise_my_concat]).then((filler, new_subtree_tags) => {
+        parent.subtree_tags = new_subtree_tags;
+        resolve(new_subtree_tags);
         parent.save((err) => {
           if (err) throw err;
         });
       });
-      parent.parentId.forEach(function(parId) {
-        updated_tags.concat(update_subtree_tags_top(newtagList, parId));
-      });
-      resolve(updated_tags);
     }).catch((err) => {
       reject(err+'\nholyshitthisshouldneverhavehappenedomg... see database.js');
     });
@@ -121,9 +130,6 @@ var update_subtree_tags_top = async function(newtagList, parentId) {
 
 
 router.post('/', adminsecured(), async function(req, res, next) {
-  var abc = await syncfindOne('Schule');
-  console.log(util.inspect(abc, false, null, true))
-  console.log(util.inspect(abc.subtree_tags, false, null, true))
   res.render('database/db_index', {});
 });
 
@@ -189,6 +195,8 @@ router.post('/engrave_new_tag', adminsecured(), async function(req,res,next) {
 
     var newtag = new Hierarchy({ tag: req.body.tag_name });
 
+
+    /* DEFINING PROMISES START */
     // get parentIds to save in new tag db entry
     var promises_parent = parent_tags.map(async function(p_tag) {
       return Hierarchy.findOne({ tag: p_tag})
@@ -228,6 +236,15 @@ router.post('/engrave_new_tag', adminsecured(), async function(req,res,next) {
       });
     });
 
+    // concatenate all child subtree_tags for new tag
+    var promise_subtree_children = child_tags.map(async function(child_tag) {
+      var c_t = await syncfindOne(child_tag);
+      return c_t.subtree_tags;
+    })
+    /* DEFINING PROMISES END */
+
+
+
     //to only render once, we execute promises one after another (like sync code)
     Promise.all(promises_parent).then((trutha) => {
       trutha = shorten(trutha);
@@ -239,39 +256,47 @@ router.post('/engrave_new_tag', adminsecured(), async function(req,res,next) {
       }).then((trutha) => {
         if (!trutha.some(isNaN)) {          // some error in the first 2 lines -> abort the db_save
 
-          Promise.all(promises_child2).then((trutha2) => {
-            trutha2 = shorten(trutha2);
-            return trutha2;
-          }).then((trutha) => {
-            if (trutha.some(isNaN)) {
-              req.session.error = trutha;
-              res.redirect(307,'/database/create_tags');
-            } else {
+          // combine subtrees of children to get subtree for new tag
+          Promise.all(promise_subtree_children).then((subtree_tag_doubleList) => {
+            var newtag_subtree_tags = [];
+            var promise_helper = subtree_tag_doubleList.map(async function(subtree_tags) {
+              return arrayUnique(newtag_subtree_tags.concat(subtree_tags));
+            });
 
-              // concatenate all child subtree_tags for new tag
-              var promise_subtree_children = child_tags.map(async function(child_tag) {
-                var c_t = await syncfindOne(child_tag);
-                return c_t.subtree_tags;
-              })
+            Promise.all(promise_helper).then(async function(finished_subtree_tags) {
 
-              Promise.all(promise_subtree_children).then((subtree_tag_doubleList) => {
-                var newtag_subtree_tags = [];
-                var promise_helper = subtree_tag_doubleList.map(async function(subtree_tags) {
-                  return arrayUnique(newtag_subtree_tags.concat(subtree_tags));
-                });
+              var stree = await new Promise(function(resolve,reject) {
+                var lastarray = [newtag.tag];
+                for (i=0;i<finished_subtree_tags.length;i++) {
+                  lastarray = lastarray.concat(finished_subtree_tags[i]);
+                }
+                for (i=0;i<parent_tags.length;i++) {
+                  if (lastarray.indexOf(parent_tags) > -1) {
+                    console.log('REJECT IN SPECIAL PROMISE');
+                    reject('ERROR: Your new tag would have created a loop.');
+                  }
+                }
+                console.log('RESOLVE IN SPECIAL PROMISE');
+                resolve(arrayUnique(lastarray));
+              });
+              console.log(stree);
+              if (stree.indexOf('ERROR') >= 0) {
+                req.session.error = stree;
+                res.redirect(307,'/database/create_tags');
+                return
+              }
+              newtag.subtree_tags = stree;
 
-                Promise.all(promise_helper).then(async function(finished_subtree_tags) {
+              // update childs of new tag with new parent
+              Promise.all(promises_child2).then((trutha2) => {
+                trutha2 = shorten(trutha2);
+                return trutha2;
+              }).then((trutha) => {
+                if (trutha.some(isNaN)) {
+                  req.session.error = trutha;
+                  res.redirect(307,'/database/create_tags');
+                } else {
 
-                  var stree = await new Promise(function(resolve,reject) {
-                    var lastarray = [newtag.tag];
-                    for (i=0;i<finished_subtree_tags.length;i++) {
-                      lastarray = lastarray.concat(finished_subtree_tags[i]);
-                    }
-                    resolve(arrayUnique(lastarray));
-                  });
-                  newtag.subtree_tags = stree;
-
-                  
                   // update subtree_tags in all upper relationships
                   var promises_subtree_update = newtag.parentId.map(async function(parId) {
                     return update_subtree_tags_top(stree,parId);
@@ -291,9 +316,9 @@ router.post('/engrave_new_tag', adminsecured(), async function(req,res,next) {
                       }
                     });
                   }); 
-                })
+                }
               });
-            }
+            });
           });
 
         } else {
