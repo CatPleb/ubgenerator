@@ -1,0 +1,28 @@
+<h1>Delete Tags:</h1>
+
+{{#each create_error}}
+  <h3>{{this}}</h3>
+{{/each}}
+
+<form action='/database/kill_existing_tag' method='post' onsubmit='return confirm("Deleted tags are gone forever! If you accidentally deleted the wrong tag, you have to create it again with all relationships!");'>
+  Select tag you want to delete:<br>
+  <select class='select_tag_to_delete' name='selected_tag' required>
+    {{#each tagList}}
+      <option value={{this}}>{{this}}</option>
+    {{/each}}
+  </select>
+  <br><br>
+  Retype the selected tag into this textfield as a confirmation:<br>
+  <input type='text' name='typed_tag' required>
+  <br><br>
+  <input type='submit' value='Delete tag!'>
+  <br>
+  <p>Info: Childs of deleted tag will get parents of deleted tag as new parents.</p>
+</form>
+
+
+<script>
+  $(document).ready(function() {
+      $('.select_tag_to_delete').select2();
+  });
+</script>
