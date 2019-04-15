@@ -3,7 +3,7 @@
 <p>You successfully created the exercise. It looks like this:</p>
 <br>
 <p>Name: {{exercise_name}}</p>
-<p>Tag: {{tag}}</p>
+<p>Tags: {{#each tags}}{{this}} {{/each}}</p>
 
 <div id='div_png'>
   <img id='png_preview' src='{{png}}' alt='compiled LaTeX code'>

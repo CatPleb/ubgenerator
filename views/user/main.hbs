@@ -4,9 +4,11 @@
 <p>Welcome {{user.nickname}}</p>
 <p>Email: {{user.displayName}}</p>
 <p>Your groups:</p>
+<ul>
 {{#each user.groups}}
-  <p>{{@index}}: {{this}}</p>
+  <li>{{this}}</li>
 {{/each}}
+</ul>
 <br>
 <p>If you want to reset your password, please log out and when logging in again, 
   choose the 'Forgot password' option.</p>

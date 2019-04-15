@@ -5,6 +5,8 @@ tmp.setGracefulCleanup();
 var fs = require('fs');
 var shortid = require('shortid');
 
+var my = require('../lib/my modules/compile_code');
+
 /* Mongoose stuff and models */
 var mongoose = require('mongoose');
 mongoose.connect(process.env.MONGOOSE_ADDRESSE, {useNewUrlParser: true});
@@ -57,7 +59,7 @@ router.post('/confirmation', secured(), function(req, res, next) {
 router.post('/engrave', secured(), function(req, res, next) {
   var exercise_name = req.body.exercise_name;
   var base64png = req.body.png_string;
-  var extag = req.body.tagselect;
+  var extag = my.convert2array(req.body.tagselect);
   var packages = req.body.packages;
   var latexcode = req.body.latexcode;
 
@@ -65,7 +67,7 @@ router.post('/engrave', secured(), function(req, res, next) {
     if (err || duplicate) {
       res.render('create/nosuccess', {error: 'ERROR: That exercise already exists.', exercise_name: exercise_name, png: base64png, tag: extag});
     } else {
-      Hierarchy.findOne({tag: extag}, function(tag_err, doc) {
+      Hierarchy.findOne({name: extag}, function(tag_error, doc) {
         if (tag_error) {
           res.render('create/nosuccess', {error: tag_error, exercise_name: exercise_name, png: base64png, tag: extag});
         } else {
@@ -76,7 +78,7 @@ router.post('/engrave', secured(), function(req, res, next) {
             code: latexcode,
             png: base64png,
             author: req.user.nickname,
-            tag: extag,
+            tags: extag, //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           };
         
           var data = new Exercises(exercise);
@@ -85,7 +87,7 @@ router.post('/engrave', secured(), function(req, res, next) {
               res.render('create/nosuccess', {error: err.message, exercise_name: exercise_name, png: base64png, tag: extag});
             }
             Exercises.findById(saveddata._id, function(err, exercise) {           //when getting >>TypeError: Cannot read property '_id' of undefined<< var exercise 15 lines ahead does not fit into database schema
-              res.render('create/success', {exercise_name: exercise.name, png: exercise.png, tag: exercise.tag});
+              res.render('create/success', {exercise_name: exercise.name, png: exercise.png, tags: exercise.tags});
             }).catch(findByIdError => {
               console.log(findByIdError);
               res.render('create/nosuccess', {error: findByIdError, exercise_name: 'Database Exercise Schema Error, please tell admin! (preferably with what exactly you did)'});

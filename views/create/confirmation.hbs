@@ -16,13 +16,22 @@
     </div>
     <br>
     <p>Select the <u>most</u> accurate tag for your exercise: </p>
-    <select name='tagselect'>
+    <select class='mainselect' name='tagselect' multiple='multiple'>
       {{#each hierarchy}}
-        <option value={{this.tag}}>{{this.tag}}</option>
+        <option value={{this.name}}>{{this.name}}</option>
       {{/each}}
     </select>
+    <br><br><br><br>
     <input type='hidden' name='packages' value="{{packages}}">
     <input type='hidden' name='latexcode' value="{{latexcode}}">
     <input type='submit' value='Create exercise!'>
   </form>
 </div>
+
+
+
+<script>
+  $(document).ready(function() {
+      $('.mainselect').select2();
+  });
+</script>

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var my = require('../lib/my modules/compile_code');
+var db_my = require('../lib/my modules/database_helper_functions');
 var util = require('util');
 
 /* Mongoose stuff and models */
@@ -13,26 +14,13 @@ var Hierarchy = require('../lib/models/hierarchy_model');
 
 
 
-function tagList(req) {
-  return new Promise((resolve) => {
-    var taglist = [];
-    Hierarchy.find(function(err, docs) {
-      for (i=0; i<docs.length; i++) {
-        taglist.push(docs[i].tag);
-      }
-      req.session.taglist = taglist;
-      resolve();
-    });
-  });
-}
-
 /* show all exercises page */
 router.get('/', async function(req, res, next) {
   var selectedtag = my.convert2array(req.query.selecttag);
 
-  if (!req.session.taglist) {
-    await tagList(req);         // create a list with all possible tags
-  }
+  // create a list with all possible tags
+  await db_my.tagList(req);
+  
   if (selectedtag == undefined) {
     res.render('search/search', {taglist: req.session.taglist});
   } else if (selectedtag.indexOf('All') >= 0) {
@@ -44,7 +32,7 @@ router.get('/', async function(req, res, next) {
             public_result.push({
               name: result[i].name,
               png: result[i].png,
-              tag: result[i].tag,
+              tags: result[i].tags,
               public_id: ('/exercises/id/'+result[i].public_id),
             });
             
@@ -55,30 +43,29 @@ router.get('/', async function(req, res, next) {
   } else if (selectedtag) {
 
     /* Get ids from searchtag and all children */
-    Hierarchy.find({ tag: { $in: selectedtag }}, async function(err, doc) {
+    Hierarchy.find({ name: { $in: selectedtag }}, async function(err, doc) {
       
       /* Now search for every exercise which has one of those ids in it */
       var promises_tags = selectedtag.map(async function(stag) {
-        return Hierarchy.find({ tag: stag });
+        return Hierarchy.find({ name: stag });
       });
       
       Promise.all(promises_tags).then((db_tags) => {
         
         newtagList = []
-        db_tags.forEach((db_tag) => {
-          newtagList = newtagList.concat(db_tag[0].subtree_tags);
-        })
+        for (i=0;i<db_tags.length;i++) {
+          newtagList = newtagList.concat(db_tags[i][0].subtree_tags);
+        }
 
-        Exercises.find( { tag: { $in: newtagList }}, function(err,result) {
+        Exercises.find( { tags: { $in: newtagList }}, function(err,result) {
 
           var public_result = [];
           for (i=0; i<result.length; i++) {
 
-            console.log(result[i].name);
             public_result.push({
               name: result[i].name,
               png: result[i].png,
-              tag: result[i].tag,
+              tags: result[i].tags,
               public_id: ('/exercises/id/'+result[i].public_id),
             });
 
