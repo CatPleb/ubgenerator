@@ -15,6 +15,7 @@
     </div>
 
     {{#if exercise.same_name_check}}
+      <p>You are the author and can edit the exercise:</p><br>
       <form action='../edit_details' method='post'>
         <input type='submit' value='Edit Exercise'>
         <input type='hidden' name='hidden_id' value={{exercise.public_id}}>
