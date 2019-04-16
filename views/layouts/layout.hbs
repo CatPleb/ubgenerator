@@ -20,6 +20,7 @@
     <a id='c' href="/create">Create</a>
     <a id='d' href="/about">About - v0.01.1</a>
     <a id='e' href="/contact">Contact</a>
+    <a id='f' href='/privacy'>Datenschutz/Privacy</a>
   </div> 
 
 
@@ -44,6 +45,7 @@
     const c = '/create';
     const d = '/about';
     const e = '/contact';
+    const f = '/privacy';
     if (window.location.pathname == '/') {
       document.getElementById('a').className = 'active';
 
@@ -51,6 +53,7 @@
       document.getElementById('c').className = '';
       document.getElementById('d').className = '';
       document.getElementById('e').className = '';
+      document.getElementById('f').className = '';
     } else if (window.location.pathname.indexOf(b) != -1) {
       document.getElementById('b').className = 'active';
 
@@ -58,6 +61,7 @@
       document.getElementById('c').className = '';
       document.getElementById('d').className = '';
       document.getElementById('e').className = '';
+      document.getElementById('f').className = '';
     } else if (window.location.pathname.indexOf(c) != -1) {
       document.getElementById('c').className = 'active';
 
@@ -65,6 +69,7 @@
       document.getElementById('b').className = '';
       document.getElementById('d').className = '';
       document.getElementById('e').className = '';
+      document.getElementById('f').className = '';
     } else if (window.location.pathname.indexOf(d) != -1) {
       document.getElementById('d').className = 'active';
 
@@ -72,6 +77,7 @@
       document.getElementById('b').className = '';
       document.getElementById('c').className = '';
       document.getElementById('e').className = '';
+      document.getElementById('f').className = '';
     } else if (window.location.pathname.indexOf(e) != -1) {
       document.getElementById('e').className = 'active';
 
@@ -79,6 +85,15 @@
       document.getElementById('b').className = '';
       document.getElementById('c').className = '';
       document.getElementById('d').className = '';
+      document.getElementById('f').className = '';
+    } else if (window.location.pathname.indexOf(f) != -1) {
+      document.getElementById('f').className = 'active';
+
+      document.getElementById('a').className = '';
+      document.getElementById('b').className = '';
+      document.getElementById('c').className = '';
+      document.getElementById('d').className = '';
+      document.getElementById('e').className = '';
     }
   </script>
 </body>
