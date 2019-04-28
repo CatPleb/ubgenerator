@@ -7,23 +7,30 @@
 
 <div id='preview'>
   <form action='/create/engrave' method='post' autocomplete='off'>
-    Give your exercise a name:<br>
-    <input type='text' name='exercise_name' size='60' required><br><br>
-    Preview of your exercise:<br><br>
-    <div id='div_png'>
-      <img id='png_preview' src={{png}} onerror="'Something went wrong. Please go back to the previous page and do not submit your exercise now.';">
-      <input type='hidden' name='png_string' value={{png}}>
+    <p>Give your exercise a name:</p>
+    <input type='text' name='exercise_name' size='80' required><br><br><br><br>
+    <p>Preview of your exercise:</p><br>
+    <div id='exercise_png'>
+      <img id='exercise_png_preview' src={{exercise_png}} onerror="'Something went wrong. Please go back to the previous page and do not submit your exercise now.';">
+      <input type='hidden' name='exercise_png_string' value={{exercise_png}}>
     </div>
-    <br>
-    <p>Select the <u>most</u> accurate tag for your exercise: </p>
-    <select class='mainselect' name='tagselect' multiple='multiple'>
-      {{#each hierarchy}}
-        <option value={{this.name}}>{{this.name}}</option>
-      {{/each}}
-    </select>
-    <br><br><br><br>
-    <input type='hidden' name='packages' value="{{packages}}">
-    <input type='hidden' name='latexcode' value="{{latexcode}}">
+    <br><br><br>
+    {{#if solution_latexcode}}
+      <p>Preview of the solution to your exercise:</p><br>
+      <div id='solution_png'>
+        <img id='solution_png_preview' src={{solution_png}} onerror="'Something went wrong. Please go back to the previous page and do not submit your exercise now.';">
+        <input type='hidden' name='solution_png_string' value={{solution_png}}>
+      </div>
+      <br><br><br><br>
+      <input type='hidden' name='solution_packages' value="{{solution_packages}}">
+      <input type='hidden' name='solution_latexcode' value="{{solution_latexcode}}">
+    {{/if}}
+    <p>Selected Tags: {{#each tags}}'{{this}}' {{/each}}</p>
+    <input type='hidden' name='tagselect' value="{{tags}}">
+    <input type='hidden' name='exercise_packages' value="{{exercise_packages}}">
+    <input type='hidden' name='exercise_latexcode' value="{{exercise_latexcode}}">
+    
+    <br><br><br>
     <input type='submit' value='Create exercise!'>
   </form>
 </div>

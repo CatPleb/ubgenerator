@@ -1,67 +1,141 @@
 <h1>Latex Compiler</h1>
 
-<div name='input' id='input'>
-    <form action='/create/confirmation' method='post' id='codeform'>
-        <h3>Input latex packages code:</h3>
-        <p>\usepackage[utf8]{inputenc}<br>
-        \usepackage{amsmath}<br>
-        \usepackage{amsthm}<br>
-        \usepackage{amssymb}<br>
-        \usepackage[ngerman]{babel}</p>
-        <textarea name='packages' id='packages' class='input' formid='codeform' rows='5'></textarea>
-        <h3>Input latex code:</h3>
-        <textarea name='latexcode' id='latexcode' class='input' formid='codeform' rows='20' wrap='on'></textarea>
-        <br>
-        <button type='button' id='refresh_button' onclick='load(i++)'>Refresh image!</button>
-        <input type='submit' id='submit_button' value='Submit Exercise'>
-    </form>
-</div>
+<form action='/create/confirmation' method='post' id='codeform'>
 
-<div id='output'>
-        <h3 id='outputtext'>Compiled Latex:</h3>
-        <img id='latexcode_png' src='' onerror=''>
-        <p id='errorp'></p>
-</div>
+  <div id='exercise'>
+    <div id='exercise_input'>
+      <h2>Input <u>Exercise</u></h2>
+      <h4>LaTeX packages:</h4>
+      <p>\usepackage[utf8]{inputenc}<br>
+      \usepackage{amsmath}<br>
+      \usepackage{amsthm}<br>
+      \usepackage{amssymb}<br>
+      \usepackage[ngerman]{babel}</p>
+      <textarea name='exercise_packages' id='exercise_packages' class='input' formid='codeform' rows='5'></textarea>
+      <h4>LaTeX code:</h4>
+      <textarea name='exercise_latexcode' id='exercise_latexcode' class='input' formid='codeform' rows='20' wrap='on' required></textarea>
+      <br>
+      <button type='button' id='refresh_button' onclick='load_exercise()'>Refresh exercise image!</button>
+    </div>
+
+    <div id='exercise_output'>
+      <h3 id='exercise_outputtext'>Compiled Exercise:</h3>
+      <img id='exercise_latexcode_png' class='latexcode_png' src='' onerror=''>
+      <p id='exercise_errorp' class='errorp'></p>
+    </div>
+  </div>
+
+  <br>
+
+  <div id='solution'>
+    <div id='solution_input'>
+      <h2>Input <u>Solution</u></h2>
+      <h4>LaTeX packages:</h4>
+      <p>\usepackage[utf8]{inputenc}<br>
+      \usepackage{amsmath}<br>
+      \usepackage{amsthm}<br>
+      \usepackage{amssymb}<br>
+      \usepackage[ngerman]{babel}</p>
+      <textarea name='solution_packages' id='solution_packages' class='input' formid='codeform' rows='5'></textarea>
+      <h4>LaTeX code:</h4>
+      <textarea name='solution_latexcode' id='solution_latexcode' class='input' formid='codeform' rows='20' wrap='on'></textarea>
+      <br>
+      <button type='button' id='refresh_button' onclick='load_solution()'>Refresh solution image!</button>
+    </div>
+      
+    <div id='solution_output'>
+      <h3 id='solution_outputtext'>Compiled Solution:</h3>
+      <img id='solution_latexcode_png' class='latexcode_png' src='' onerror=''>
+      <p id='solution_errorp' class='errorp'></p>
+    </div>
+  </div>
+
+  <div id='select'>
+  <p>Select the appropriate and most specific tags:</p>
+  <select class='mainselect' name='selected_tags' multiple='multiple'>
+    {{#each taglist}}
+      <option value={{this}}>{{this}}</option>
+    {{/each}}
+  </select>
+  </div>
+  <br>
+
+  <input type='submit' id='submit_button' value='Submit Exercise'>
+</form>
+
 
 
 <script>
 
-    var i = 0;
-    var j = 0;
-    var change = 0;
-    var intervalID = window.setInterval(function() {        // recompile picture
-        if (change == 1) {
-            load(i++);
-            change = 0;
-        }
-    }, 1000);
-    $('#packages').bind('input propertychange', ()=>{change = 1;});
-    $('#latexcode').bind('input propertychange', ()=>{change = 1;});
-
-    function load(id) {
-        console.log('load'+id);
-        if($('#latexcode').val().trim().length >= 1) {      // check if textarea is empty
-            $.ajax({
-                type: 'POST',
-                url: '/create/compile',
-                data: $('#codeform').serialize(),
-                success: data => {
-                    if(id>=j){
-                        if (data['res']) {
-                            $("#latexcode_png").attr('src', data['res']);
-                            j = id;
-                        }
-                        if (data['err']) {
-                            $("#errorp").html('<b>ERROR:</b><br>'+data['err']);
-                        } else {
-                            $('#errorp').html('');
-                        }
-                    }
-                },
-            });
-        } else {
-            $("#latexcode_png").attr('src', '');
-            j = id;
-        }
+  var exercise_change = 0;
+  var exercise_intervalID = window.setInterval(function() {        // recompile picture
+    if (exercise_change == 1) {
+      load_exercise();
+      exercise_change = 0;
     }
+  }, 1000);
+  $('#exercise_packages').bind('input propertychange', ()=>{exercise_change = 1;});
+  $('#exercise_latexcode').bind('input propertychange', ()=>{exercise_change = 1;});
+
+  function load_exercise() {
+    if($('#exercise_latexcode').val().trim().length >= 1) {      // check if textarea is empty
+      $.ajax({
+        type: 'POST',
+        url: '/create/exercise_compile',
+        data: $('#codeform').serialize(),
+        success: data => {
+          if (data['res']) {
+            $("#exercise_latexcode_png").attr('src', data['res']);
+          }
+          if (data['err']) {
+            $("#exercise_errorp").html('<b>ERROR:</b><br>'+data['err']);
+          } else {
+            $('#exercise_errorp').html('');
+          }
+        },
+      });
+    } else {
+      $("#exercise_latexcode_png").attr('src', '');
+    }
+  }
+
+
+
+  var solution_change = 0;
+  var solution_intervalID = window.setInterval(function() {        // recompile picture
+    if (solution_change == 1) {
+      load_solution();
+      solution_change = 0;
+    }
+  }, 1000);
+  $('#solution_packages').bind('input propertychange', ()=>{solution_change = 1;});
+  $('#solution_latexcode').bind('input propertychange', ()=>{solution_change = 1;});
+
+  function load_solution() {
+    if($('#solution_latexcode').val().trim().length >= 1) {      // check if textarea is empty
+      $.ajax({
+        type: 'POST',
+        url: '/create/solution_compile',
+        data: $('#codeform').serialize(),
+        success: data => {
+          if (data['res']) {
+            $("#solution_latexcode_png").attr('src', data['res']);
+          }
+          if (data['err']) {
+            $("#solution_errorp").html('<b>ERROR:</b><br>'+data['err']);
+          } else {
+            $('#solution_errorp').html('');
+          }
+        },
+      });
+    } else {
+      $("#exercise_latexcode_png").attr('src', '');
+    }
+  }
+
+
+  $(document).ready(function() {
+      $('.mainselect').select2();
+  });
+
 </script>

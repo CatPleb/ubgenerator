@@ -54,7 +54,7 @@ router.post('/edit_details', function(req,res,next) {
         author: exercise.author,
       };
       if (req.user) {
-        if (req.user.nickname == exercise.author) {
+        if (req.user.user_id == exercise.author_id) {
           public_exercise.same_name_check = true;
         } else {public_exercise.same_name_check = false;}
       }
@@ -68,7 +68,6 @@ router.post('/edit_details', function(req,res,next) {
 router.post('/change_tags', async function(req,res,next) {
   var changing_exercise = await Exercises.findOne({ public_id: req.body.hidden_id });
   changing_exercise.tags = my.convert2array(req.body.changing_tags);
-  console.log(changing_exercise);
   changing_exercise.save((err) => {
     if (err) throw err;
     res.redirect('/exercises/id/'+req.body.hidden_id);

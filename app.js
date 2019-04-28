@@ -81,9 +81,10 @@ var sess = {
   resave: false,
   saveUninitialized: true
 };
-if (app.get('env') === 'production') {
+/* Needs https, not yet implemented!
+if (process.env.STATUS == 'production') {
   sess.cookie.secure = true; // serve secure cookies, requires https
-}
+} */
 
 app.use(expressSession(sess));
 app.use(passport.initialize());
@@ -116,7 +117,10 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  if (res.locals.message == 'Not Found') {
+    res.locals.message = 'ERROR 404, page not found.'
+  }
+  res.locals.error = process.env.STATUS === 'development' ? err : {};
 
   // render the error page
   res.status(err.status || 500);

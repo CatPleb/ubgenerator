@@ -5,10 +5,18 @@
 <p>Name: {{exercise_name}}</p>
 <p>Tags: {{#each tags}}{{this}} {{/each}}</p>
 
+<p>Exercise:</p>
 <div id='div_png'>
-  <img id='png_preview' src='{{png}}' alt='compiled LaTeX code'>
+  <img id='exercise_png_preview' class='latexcode_png' src='{{exercise_png}}' alt='compiled LaTeX code for the exercise'>
 </div>
 <br>
+{{#if solution_png}}
+  <p>Solution</p>
+  <div id='div_png'>
+    <img id='solution_png_preview' class='latexcode_png' src='{{solution_png}}' alt='compiled LaTeX code for the solution'>
+  </div>
+<br><br><br>
+{{/if}}
 <form action='/' method='get'>
   <input type='submit' value='Go to Frontpage'>
 </form>
