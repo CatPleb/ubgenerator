@@ -54,7 +54,7 @@ router.post('/edit_details', function(req,res,next) {
         author: exercise.author,
       };
       if (req.user) {
-        if (req.user.user_id == exercise.author_id) {
+        if ( (req.user.user_id == exercise.author_id) || (req.user.groups.indexOf('Admin') > -1) ) {
           public_exercise.same_name_check = true;
         } else {public_exercise.same_name_check = false;}
       }
