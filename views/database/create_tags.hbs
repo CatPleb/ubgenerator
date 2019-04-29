@@ -7,18 +7,17 @@
 <form action='/database/engrave_new_tag' method='post' onsubmit='return confirm("Tag changes are final! Be sure you put in the right information!");'>
   New tag:<br>
   <input type='text' name='tag_name' required><br>
-  Attention: Write tags with an upper case first letter and in german for now!
+  Attention: Write tags with an upper case first letter and in <b>english</b>!
   <br><br>
   Select parent tags:<br>
-  <select class='select_relationships' name='parent_tags' multiple='multiple'>
+  <select class='select_relationships' name='parent_tags' multiple='multiple' style='width: 300px'>
     {{#each tagList}}
       <option value={{this}}>{{this}}</option>
     {{/each}}
   </select>
   <br><br>
   Select child tags:<br>
-  
-  <select class='select_relationships' name='child_tags' multiple='multiple'>
+  <select class='select_relationships' name='child_tags' multiple='multiple' style='width: 300px'>
     {{#each tagList}}
       <option value={{this}}>{{this}}</option>
     {{/each}}
