@@ -18,12 +18,12 @@ var Solutions = require('../lib/models/solutions_model');
 
 // my functions
 var my = require('../lib/my modules/compile_code');
-var secured = require('../lib/middleware/secured');
+var allowed_secured = require('../lib/middleware/allowed_secured');
 
 
 
 /* Create exercise pages */
-router.get('/', secured(), async function(req, res, next) {
+router.get('/', allowed_secured(), async function(req, res, next) {
   await db_my.tagList(req);
 
   res.render('create/create', { taglist: req.session.taglist });
@@ -31,7 +31,7 @@ router.get('/', secured(), async function(req, res, next) {
 
 
 /* post page for real time compiling for the exercise */
-router.post('/exercise_compile', secured(), function(req, res, next) {
+router.post('/exercise_compile', allowed_secured(), function(req, res, next) {
 
   my.final_compile(req.body.exercise_packages,req.body.exercise_latexcode, function(final_compile_error, base64png) {
     if (final_compile_error) {
@@ -44,7 +44,7 @@ router.post('/exercise_compile', secured(), function(req, res, next) {
 
 
 /* post page for real time compiling for the solution */
-router.post('/solution_compile', secured(), function(req, res, next) {
+router.post('/solution_compile', allowed_secured(), function(req, res, next) {
 
   my.final_compile(req.body.solution_packages,req.body.solution_latexcode, function(final_compile_error, base64png) {
     if (final_compile_error) {
@@ -57,7 +57,7 @@ router.post('/solution_compile', secured(), function(req, res, next) {
 
 
 /* Confirmation query for newly created exercises */
-router.post('/confirmation', secured(), function(req, res, next) {
+router.post('/confirmation', allowed_secured(), function(req, res, next) {
   
   my.final_compile(req.body.exercise_packages, req.body.exercise_latexcode, function(final_compile_error_1, exercise_base64png) {
     if (final_compile_error_1) {
@@ -87,7 +87,7 @@ router.post('/confirmation', secured(), function(req, res, next) {
 
 
 /* try to write new exercise into database */
-router.post('/engrave', secured(), function(req, res, next) {
+router.post('/engrave', allowed_secured(), function(req, res, next) {
   var exercise_name = req.body.exercise_name;
   var extag = my.convert2array(req.body.tagselect);
   
