@@ -204,6 +204,7 @@ button:hover {
     width: 50%;
     border-style: solid;
     border-width: 0.5px;
+    overflow: hidden;
   }
 
   div#select {

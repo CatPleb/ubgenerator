@@ -10,14 +10,14 @@
     <p>Give your exercise a name:</p>
     <input type='text' name='exercise_name' size='80' required><br><br><br><br>
     <p>Preview of your exercise:</p><br>
-    <div id='exercise_png'>
+    <div id='div_png'>
       <img id='exercise_png_preview' src={{exercise_png}} onerror="'Something went wrong. Please go back to the previous page and do not submit your exercise now.';">
       <input type='hidden' name='exercise_png_string' value={{exercise_png}}>
     </div>
     <br><br><br>
     {{#if solution_latexcode}}
       <p>Preview of the solution to your exercise:</p><br>
-      <div id='solution_png'>
+      <div id='div_png'>
         <img id='solution_png_preview' src={{solution_png}} onerror="'Something went wrong. Please go back to the previous page and do not submit your exercise now.';">
         <input type='hidden' name='solution_png_string' value={{solution_png}}>
       </div>
