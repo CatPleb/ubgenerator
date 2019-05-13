@@ -12,6 +12,13 @@
       <p>Tags: {{#each exercise.tags}}{{this}} {{/each}}</p>
       <p>Author: {{exercise.author}}</p>
       <br>
+      <button onclick='showHidden()'>Show Source Code</button>
+      <div id='hiddenSourceCode' style='display: none'>
+        <pre id='code'>{{exercise.packages}}</pre>
+        <pre id='code'>{{exercise.code}}</pre>
+      </div>
+      <br>
+      <br>
     </div>
 
     {{#if exercise.same_name_check}}
@@ -26,3 +33,18 @@
     <p>Exercise ID missing</p>
   {{/if}}
 {{/if}}
+
+
+
+<script>
+
+  function showHidden() {
+    var x = document.getElementById('hiddenSourceCode');
+    if (x.style.display === 'none') {
+      x.style.display = 'block';
+    } else {
+      x.style.display = 'none';
+    }
+  }
+
+</script>

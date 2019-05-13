@@ -10,6 +10,7 @@ mongoose.connect(process.env.MONGOOSE_ADDRESSE, {useNewUrlParser: true});
 
 var Exercises = require('../lib/models/exercises_model');
 var Hierarchy = require('../lib/models/hierarchy_model');
+var Solutions = require('../lib/models/solutions_model');
 
 
 
@@ -27,10 +28,17 @@ router.get('/id/:exercise_id', function(req, res, next) {
         public_id: exercise.public_id,
         name: exercise.name,
         png: exercise.png,
+        packages: exercise.packages,
+        code: exercise.code,
         tags: exercise.tags,
         author: exercise.author,
+
+        solutions_public_ids: exercise.related_solutions_public_ids,
       };
       if (req.user) {
+        if ( req.user.groups.indexOf('Allowed') > -1 ) {
+          public_exercise.allowed = true;
+        } else {public_exercise.allowed = false;}
         if ( (req.user.user_id == exercise.author_id) || (req.user.groups.indexOf('Admin') > -1) ) {
           public_exercise.same_name_check = true;
         } else {public_exercise.same_name_check = false;}
