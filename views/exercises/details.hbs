@@ -6,7 +6,7 @@
 
     <div class='exercises_details_div'>
       <h1>{{exercise.name}}</h1>
-      <div class='exercises_details_png_border'>
+      <div id='exercise_png'>
         <img class='exercises_details_png' src={{exercise.png}}>
       </div>
       <p>Tags: {{#each exercise.tags}}{{this}} {{/each}}</p>
