@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var bodyParser = require('body-parser');
+
 
 var exphbs = require('express-handlebars');
 var expressValidator = require('express-validator');
@@ -89,6 +91,10 @@ if (process.env.STATUS == 'production') {
 app.use(expressSession(sess));
 app.use(passport.initialize());
 app.use(passport.session());
+
+// set upload limit to 50mb
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 app.use(logger('dev'));
 app.use(express.json());
