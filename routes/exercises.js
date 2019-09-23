@@ -41,7 +41,7 @@ router.get('/id/:exercise_id', function(req, res, next) {
           public_exercise.same_name_check = true;
         } else {public_exercise.same_name_check = false;}
       }
-      if (public_exercise.allowed == true && exercise.solution_id != '') {
+      if (public_exercise.allowed == true && (exercise.solution_id != null && exercise.solution_id != '')) {
         Solutions.findOne( { public_id: exercise.solution_id }, async function(err, solution) {
           if (err) {
             await db_my.tagList(req);
