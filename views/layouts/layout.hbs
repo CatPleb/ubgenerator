@@ -17,10 +17,10 @@
   <div id='black_bar'></div>
   
   <div class="topnav">
-    <a id='a' href="/">Uebomat</a>
+    <a id='a' href="/">Uebomat - v0.3</a>
     <a id='b' href="/search?selecttag=All">Search</a>
     <a id='c' href="/create">Create</a>
-    <a id='d' href="/about">About - v0.02.1</a>
+    <a id='d' href="/about">About</a>
     <a id='e' href="/contact">Contact</a>
     <a id='f' href='/privacy'>Privacy Policy</a>
     <a id='tuk_imprint_link' href='https://www.uni-kl.de/en/imprint/' target='_blank'>Imprint</a>
@@ -58,7 +58,7 @@
       document.getElementById('d').className = '';
       document.getElementById('e').className = '';
       document.getElementById('f').className = '';
-    } else if (window.location.pathname.indexOf(b) != -1) {
+    } else if (window.location.pathname.indexOf(b) != -1 || window.location.pathname.indexOf('/exercises') != -1) {
       document.getElementById('b').className = 'active';
 
       document.getElementById('a').className = '';

@@ -32,8 +32,6 @@ router.get('/id/:exercise_id', function(req, res, next) {
         code: exercise.code,
         tags: exercise.tags,
         author: exercise.author,
-
-        solutions_public_ids: exercise.related_solutions_public_ids,
       };
       if (req.user) {
         if ( req.user.groups.indexOf('Allowed') > -1 ) {
@@ -43,8 +41,31 @@ router.get('/id/:exercise_id', function(req, res, next) {
           public_exercise.same_name_check = true;
         } else {public_exercise.same_name_check = false;}
       }
-      await db_my.tagList(req);
-      res.render('exercises/details', {exercise: public_exercise, tagList: req.session.taglist});
+      if (public_exercise.allowed == true && exercise.solution_id != '') {
+        Solutions.findOne( { public_id: exercise.solution_id }, async function(err, solution) {
+          if (err) {
+            await db_my.tagList(req);
+            res.render('exercises/details', {solution_error: 'ERROR: There was no solution found, but there should be one.',
+                                            exercise: public_exercise, tagList: req.session.taglist});
+          }
+          public_solution = {
+            png: solution.png,
+            packages: solution.packages,
+            code: solution.code,
+            author: solution.author,
+          }
+          await db_my.tagList(req);
+          res.render('exercises/details', {exercise: public_exercise, solution: public_solution, 
+                                          tagList: req.session.taglist});
+        })
+      } else {
+        if (exercise.solution_id == '') {
+          solution_unavailable = true;
+        } else {solution_unavailable = false;}
+        await db_my.tagList(req);
+        res.render('exercises/details', {exercise: public_exercise, tagList: req.session.taglist,
+                                          solution_unavailable: solution_unavailable});
+      }
     }
   });
 });

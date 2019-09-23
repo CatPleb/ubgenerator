@@ -4,6 +4,7 @@ var tmp = require('tmp');
 tmp.setGracefulCleanup();
 var fs = require('fs');
 var shortid = require('shortid');
+var util = require('util');     // for a better console.log()
 
 var my = require('../lib/my modules/compile_code');
 var db_my = require('../lib/my modules/database_helper_functions');
@@ -37,6 +38,7 @@ router.post('/exercise_compile', allowed_secured(), function(req, res, next) {
     if (final_compile_error) {
       res.send({err: final_compile_error});
     } else {
+      //console.log(util.inspect(req.body.exercise_latexcode, false, null, true))
       res.send({res: base64png});
     }
   });
@@ -61,14 +63,14 @@ router.post('/confirmation', allowed_secured(), function(req, res, next) {
   
   my.final_compile(req.body.exercise_packages, req.body.exercise_latexcode, function(final_compile_error_1, exercise_base64png) {
     if (final_compile_error_1) {
-      res.render('create/nosuccess', {error: 'Error: That exercise might already exist.',
+      res.render('create/nosuccess', {error: 'ERROR while compiling exercise: '+final_compile_error_1,
         exercise_name: 'ERROR; DONT RETRY', png: 'NONE', tag: 'NONE'});
     } else {
 
       if (req.body.solution_latexcode) { // if there is a solution confirm both
         my.final_compile(req.body.solution_packages, req.body.solution_latexcode, function(final_compile_error_2, solution_base64png) {
           if (final_compile_error_2) {
-            res.render('create/nosuccess', {error: 'Error: Compiling solution failed.', exercise_name: 'ERROR; DONT RETRY',
+            res.render('create/nosuccess', {error: 'ERROR while compiling solution', exercise_name: 'ERROR; DONT RETRY',
               png: 'NONE', tag: 'NONE'});
           } else {
             res.render('create/confirmation', {tags: my.convert2array(req.body.selected_tags), exercise_packages: req.body.exercise_packages,
@@ -105,14 +107,14 @@ router.post('/engrave', allowed_secured(), function(req, res, next) {
     } else {
       expid = shortid.generate();
       if (solution_latexcode) {
-        solpid = [shortid.generate()];
+        solpid = shortid.generate();
       } else {
         solpid = undefined;
       }
 
       var exercise = {                  // EXERCISE MODEL DEFINITION; CHANGE IF MODEL/SCHEMA CHANGED!!!
         public_id: expid,
-        related_solutions_public_ids: solpid,
+        solution_id: solpid,
         name: exercise_name,
         packages: exercise_packages,
         code: exercise_latexcode,

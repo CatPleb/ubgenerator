@@ -12,16 +12,82 @@
       <p>Tags: {{#each exercise.tags}}{{this}} {{/each}}</p>
       <p>Author: {{exercise.author}}</p>
       <br>
-      <button onclick='showHidden()'>Show Source Code</button>
-      <div id='hiddenSourceCode' style='display: none'>
-        <pre id='code'>{{exercise.packages}}</pre>
-        <pre id='code'>{{exercise.code}}</pre>
+      <button onclick='showHidden("hiddenSourceCode")' id='showHiddenButton'>Show Source Code</button>
+
+      <div class='tooltip'>
+        <button onclick='copyToClipboard("#code_solpackages")' onmouseout='outFunc("#code_solpackages")' id='copyToClipboardButton'>
+          <span class="tooltiptext" id="#code_solpackages_myTooltip">Copy to clipboard</span>
+          Copy Packages
+        </button>
+      </div>
+
+      <div class='tooltip'>
+        <button onclick='copyToClipboard("#code_solution")' onmouseout='outFunc("#code_solution")' id='copyToClipboardButton'>
+          <span class="tooltiptext" id="#code_solution_myTooltip">Copy to clipboard</span>
+          Copy Exercise
+        </button>
+      </div>
+
+      <div id='hiddenSourceCode' class='hiddenInfo' style='display: none'>
+        <code><pre id='code_solpackages'>{{exercise.packages}}</pre></code>
+        <code><pre id='code_solution'>{{exercise.code}}</pre></code>
       </div>
       <br>
       <br>
     </div>
+  {{else}}
+    <p>Exercise ID missing</p>
+  {{/if}}
+  <br>
+  {{#if solution_error}}
+    <p>SOLUTION_ERROR: {{solution_error}}</p>
+  {{else}}
+
+    {{#if solution_unavailable}}
+      <p>There is no solution available for this exercise!</p>
+    {{else}}
+
+      {{#if solution}}
+        <button onclick='showHidden("hiddenSolution")' id='showHiddenButton' class='nice_black_buttons'>Show Solution</button>
+        <div id='hiddenSolution' class='hiddenInfo' style='display: none'>
+          <div class='exercises_details_div'>
+            <h3><b>Solution:</b></h3>
+            <div id='div_png'>
+              <img class='latexcode_png' src={{solution.png}}>
+            </div>
+            <p>Author: {{solution.author}}</p>
+            <br>
+            <button onclick='showHidden("hiddenSourceCode_Solution")' id='showHiddenButton'>Show Source Code</button>
+
+            <div class='tooltip'>
+              <button onclick='copyToClipboard("#code_packages")' onmouseout='outFunc("#code_packages")' id='copyToClipboardButton'>
+                <span class="tooltiptext" id="#code_packages_myTooltip">Copy to clipboard</span>
+                Copy Packages
+              </button>
+            </div>
+
+            <div class='tooltip'>
+              <button onclick='copyToClipboard("#code_exercise")' onmouseout='outFunc("#code_exercise")' id='copyToClipboardButton'>
+                <span class="tooltiptext" id="#code_exercise_myTooltip">Copy to clipboard</span>
+                Copy Exercise
+              </button>
+            </div>
+
+            <div id='hiddenSourceCode_Solution' class='hiddenInfo' style='display: none'>
+              <code><pre id='code_packages'>{{solution.packages}}</pre></code>
+              <code><pre id='code_exercise'>{{solution.code}}</pre></code>
+            </div>
+            <br>
+            <br>
+          </div>
+        </div>
+      {{else}}
+        <p>To see solution, please log in.</p>
+      {{/if}}
+    {{/if}}
 
     {{#if exercise.same_name_check}}
+      <br><br><br><br><br><br>
       <p>You are the author and can edit the exercise:</p>
       <form action='../edit_details' method='post'>
         <input type='submit' value='Edit Exercise'>
@@ -29,22 +95,41 @@
       </form>
     {{/if}}
 
-  {{else}}
-    <p>Exercise ID missing</p>
   {{/if}}
 {{/if}}
-
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
 
 <script>
 
-  function showHidden() {
-    var x = document.getElementById('hiddenSourceCode');
+  function showHidden(element_id) {
+    var x = document.getElementById(element_id);
     if (x.style.display === 'none') {
       x.style.display = 'block';
     } else {
       x.style.display = 'none';
     }
+  }
+
+  function copyToClipboard(element_id) {
+    var $temp = $("<textarea>");
+    $("body").append($temp);
+    var x = $(element_id).html().trim().replace(/<br>/g, '\n').replace(/<\/?[^>]+>/g, '').replace(/&amp;/g, '&');
+    $temp.val(x).select();
+    if (x == '') {
+      var tooltip = document.getElementById(element_id+"_myTooltip");
+      tooltip.innerHTML = "There is nothing to copy";
+    } else {
+      var tooltip = document.getElementById(element_id+"_myTooltip");
+      tooltip.innerHTML = "Copied!";
+    }
+    document.execCommand("copy");
+    $temp.remove();
+  }
+
+  function outFunc(element_id) {
+    var tooltip = document.getElementById(element_id+"_myTooltip");
+    tooltip.innerHTML = "Copy to clipboard";
   }
 
 </script>
