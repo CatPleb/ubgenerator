@@ -59,7 +59,7 @@ router.get('/id/:exercise_id', function(req, res, next) {
                                           tagList: req.session.taglist});
         })
       } else {
-        if (exercise.solution_id == '') {
+        if (exercise.solution_id == null || exercise.solution_id == '') {
           solution_unavailable = true;
         } else {solution_unavailable = false;}
         await db_my.tagList(req);
