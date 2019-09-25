@@ -8,7 +8,7 @@
 <div id='preview'>
   <form action='/create/engrave' method='post' autocomplete='off'>
     <p>Give your exercise a name:</p>
-    <input type='text' name='exercise_name' size='80' required><br><br><br><br>
+    <input type='text' name='exercise_name' size='80' value={{exercise_title}} required><br><br><br><br>
     <p>Preview of your exercise:</p><br>
     <div id='div_png'>
       <img id='exercise_png_preview' class='latexcode_png' src={{exercise_png}} onerror="'Something went wrong. Please go back to the previous page and do not submit your exercise now.';">

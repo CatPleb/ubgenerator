@@ -76,7 +76,7 @@ router.post('/edit_details', function(req,res,next) {
     if (err) res.render('exercises/details', {exercise_error: 'ERROR: Exercise not found!'});
     else {
       public_exercise = {
-        public_id: exercise.public_id,
+        public_id: 'id/'+exercise.public_id,
         name: exercise.name,
         png: exercise.png,
         tags: exercise.tags,

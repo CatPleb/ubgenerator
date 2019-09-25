@@ -10,9 +10,11 @@
     <p>Tags: {{#each exercise.tags}}{{this}} {{/each}}</p>
     <p>Author: {{exercise.author}}</p>
     <br>
-    <br>
-    <br>
     {{#if exercise.same_name_check}}
+      <form action={{exercise.public_id}} method='get'>
+        <input type='submit' value='Finish editing'>
+      </form><br><br><br>
+
       <form action='/exercises/change_tags' method='post'>
         <select class='details_select_tags' name='changing_tags' multiple='multiple'>
           {{#each taglist}}

@@ -76,12 +76,13 @@ router.post('/confirmation', allowed_secured(), function(req, res, next) {
             res.render('create/confirmation', {tags: my.convert2array(req.body.selected_tags), exercise_packages: req.body.exercise_packages,
               exercise_latexcode: req.body.exercise_latexcode, exercise_png: exercise_base64png,
               solution_packages: req.body.solution_packages, solution_latexcode: req.body.solution_latexcode,
-              solution_png: solution_base64png, });
+              solution_png: solution_base64png, exercise_title: req.body.exercise_title});
           }
         });
       } else { // if no solution only confirm the exercise
         res.render('create/confirmation', {tags: my.convert2array(req.body.selected_tags), exercise_packages: req.body.exercise_packages,
-          exercise_latexcode: req.body.exercise_latexcode, exercise_png: exercise_base64png});
+          exercise_latexcode: req.body.exercise_latexcode, exercise_png: exercise_base64png,
+          exercise_title: req.body.exercise_title});
       }
     }
   });
