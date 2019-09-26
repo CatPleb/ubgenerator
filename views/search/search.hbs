@@ -5,9 +5,10 @@
     <select class='mainselect' name='selecttag' multiple='multiple'>
         <option value='All'>All</option>
       {{#each taglist}}
-        <option value={{this}}>{{this}}</option>
+        <option value='{{this}}'>{{this}}</option>
       {{/each}}
     </select>
+    Press Tab -> Enter for fast searching!
     <br><br>
     <input type='submit' value='Search!'>
   </form>
