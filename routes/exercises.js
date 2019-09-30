@@ -79,6 +79,8 @@ router.post('/edit_details', function(req,res,next) {
         public_id: 'id/'+exercise.public_id,
         name: exercise.name,
         png: exercise.png,
+        packages: exercise.packages,
+        code: exercise.code,
         tags: exercise.tags,
         author: exercise.author,
       };
@@ -105,10 +107,19 @@ router.post('/change_tags', async function(req,res,next) {
 
 
 router.post('/delete', function(req, res, next) {
-  Exercises.findOneAndDelete( { public_id: req.body.hidden_id }, function(err, deleted_element){
+  hidden_id = req.body.hidden_id.slice(3);
+  Exercises.findOne( { public_id: hidden_id }, function(err, db_exercise) {
     if (err) throw err;
-    res.render('exercises/delete_successful', {deleted_exercise_name: deleted_element.name});
-  })
+    if (db_exercise.solution_id) {
+      Solutions.deleteOne( {public_id: db_exercise.solution_id}, function(solerr, db_solution) {
+        if (solerr) throw solerr;
+      });
+    }
+    Exercises.deleteOne( { public_id: hidden_id }, function(err, deleted_element){
+      if (err) throw err;
+      res.render('exercises/delete_successful', {deleted_exercise_name: deleted_element.name});
+    })
+  });
 });
 
 
