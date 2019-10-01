@@ -23,7 +23,9 @@
       <div class='search_result_png_border'>
         <img class='search_result_png' src={{this.png}}>
       </div>
-      <p>Tags: {{#each this.tags}}{{this}} {{/each}}</p>
+      <p>Tags: {{#if this.tags}}
+        {{#each this.tags}}[{{this}}] {{/each}}
+        {{else}}none{{/if}}</p>
       <form action={{this.public_id}} method='get'>
         <input type='submit' id='exercise_link' value='Details'>
       </form>

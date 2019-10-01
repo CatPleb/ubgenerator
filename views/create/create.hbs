@@ -13,7 +13,7 @@
       \usepackage{amsthm}<br>
       \usepackage{amssymb}<br>
       \usepackage[ngerman]{babel}</p>
-      <textarea name='exercise_packages' id='exercise_packages' class='input' formid='codeform' rows='5' spellcheck='false'></textarea>
+      <textarea name='exercise_packages' id='exercise_packages' class='input' formid='codeform' rows='5' wrap='on' spellcheck='false'></textarea>
       <h4>LaTeX code:</h4>
       <textarea name='exercise_latexcode' id='exercise_latexcode' class='input' formid='codeform' rows='20' wrap='on' spellcheck='false' required></textarea>
       <br>
@@ -38,7 +38,7 @@
       \usepackage{amsthm}<br>
       \usepackage{amssymb}<br>
       \usepackage[ngerman]{babel}</p>
-      <textarea name='solution_packages' id='solution_packages' class='input' formid='codeform' rows='5' spellcheck='false'></textarea>
+      <textarea name='solution_packages' id='solution_packages' class='input' formid='codeform' rows='5' wrap='on' spellcheck='false'></textarea>
       <h4>LaTeX code:</h4>
       <textarea name='solution_latexcode' id='solution_latexcode' class='input' formid='codeform' rows='20' wrap='on' spellcheck='false'></textarea>
       <br>
@@ -56,7 +56,7 @@
   <p>Select the appropriate and most specific tags:</p>
   <select class='mainselect' name='selected_tags' multiple='multiple'>
     {{#each taglist}}
-      <option value={{this}}>{{this}}</option>
+      <option value='{{this}}'>{{this}}</option>
     {{/each}}
   </select>
   </div>

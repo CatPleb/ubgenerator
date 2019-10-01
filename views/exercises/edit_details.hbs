@@ -4,26 +4,82 @@
 
   <div class='exercises_details_div'>
     <h1>{{exercise.name}}</h1>
-    <div id='div_png'>
+    <br>
+    <p>Exercise:</p>
+    <div id='exercise_png' class='div_png'>
       <img class='latexcode_png' src={{exercise.png}}>
     </div>
-    <p>Tags: {{#each exercise.tags}}{{this}} {{/each}}</p>
+    <p>Solution:</p>
+    <div id='solution_png' class='div_png'>
+      <img class='latexcode_png' src={{solution.png}}>
+    </div><br><br>
+    
+    <p>Tags: {{#if exercise.tags}}
+      {{#each exercise.tags}}[{{this}}] {{/each}}
+      {{else}}none{{/if}}</p>
+
+    <form action='/exercises/change_tags' method='post'>
+      <select class='details_select_tags' name='changing_tags' multiple='multiple' style='width: 300px'>
+        {{#each taglist}}
+          <option value='{{this}}'>{{this}}</option>
+        {{/each}}
+      </select>
+      <input type='submit' value='Save as new Tags'>
+      <input type='hidden' name='hidden_id' value='{{exercise.public_id}}'>
+    </form>
+  
     <p>Author: {{exercise.author}}</p>
     <br>
     {{#if exercise.same_name_check}}
-      <form action={{exercise.public_id}} method='get'>
-        <input type='submit' value='Finish editing'>
-      </form><br><br><br>
 
-      <form action='/exercises/change_tags' method='post'>
-        <select class='details_select_tags' name='changing_tags' multiple='multiple'>
-          {{#each taglist}}
-            <option value={{this}}>{{this}}</option>
-          {{/each}}
-        </select>
-        <input type='submit' value='Change tags'>
-        <input type='hidden' name='hidden_id' value={{exercise.public_id}}>
+      <button onclick='showHidden("hiddenChangeExercise")' id='showHiddenButton1'>Change Exercise Code</button> 
+      {{#if solution}}
+      <button onclick='showHidden("hiddenChangeSolution")' id='showHiddenButton2'>Change Solution Code</button>
+      {{/if}}
+
+      <div id='hiddenChangeExercise' class='hiddenChange' style='display: none'>
+        <h3>Exercise:</h3>
+        <form action='/exercises/change_exercise' method='post'>
+          <div id='exercise_packages'>
+            <p>Packages:</p>
+            <textarea name='changed_packages' id='solution_changed_packages' rows='5' cols='60%' wrap='on' spellcheck='false'>{{exercise.packages}}</textarea>
+          </div>
+          <div id='exercise_code'>
+            <p>Exercise:</p>
+            <textarea name='changed_code' id='solution_changed_code' rows='20' cols='60%' wrap='on' spellcheck='false'>{{exercise.code}}</textarea>
+          </div>
+          <br>
+          <input type='submit' value='Save changed Exercise Code' onclick='return confirm("Are you sure you want to change the exercise?");'>
+          <input type='hidden' name='hidden_id' value='{{exercise.public_id}}'>
+        </form>
+      <br><br></div>
+
+      {{#if solution}}
+      <div id='hiddenChangeSolution' class='hiddenChange' style='display: none'>
+        <h3>Solution:</h3>
+        <form action='/exercises/change_solution' method='post'>
+          <div id='solution_packages'>
+            <p>Packages:</p>
+            <textarea name='changed_packages' id='solution_changed_packages' rows='5' cols='60%' wrap='on' spellcheck='false'>{{solution.packages}}</textarea>
+          </div>
+          <div id='solution_code'>
+            <p>Solution:</p>
+            <textarea name='changed_code' id='solution_changed_code' rows='20' cols='60%' wrap='on' spellcheck='false'>{{solution.code}}</textarea>
+          </div>
+          <br>
+          <input type='submit' value='Save changed Solution Code' onclick='return confirm("Are you sure you want to change the solution?");'>
+          <input type='hidden' name='hidden_solution_id' value='{{solution.public_id}}'>
+          <input type='hidden' name='hidden_exercise_id' value='{{exercise.public_id}}'>
+        </form>
+      <br><br></div>
+      {{/if}}
+
+      <br><br><br><br>
+      <form action='/exercises/redirect_back' method='post'>
+        <input type='submit' value='Stop Editing (without saving)'>
+        <input type='hidden' name='hidden_id' value='{{exercise.public_id}}'>
       </form><br>
+      Scroll down to delete.
 
       <br><br><br><br><br><br><br><br><br><br><br><br>
       <form action='/exercises/delete' method='post'>
@@ -41,7 +97,18 @@
 {{/if}}
 
 <script>
+
+  function showHidden(element_id) {
+    var x = document.getElementById(element_id);
+    if (x.style.display === 'none') {
+      x.style.display = 'block';
+    } else {
+      x.style.display = 'none';
+    }
+  }
+
   $(document).ready(function() {
       $('.details_select_tags').select2();
   });
+
 </script>

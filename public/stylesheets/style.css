@@ -198,10 +198,10 @@ button:hover {
     max-height: 90%;
   }
 
-  div#div_png {
+  .div_png {
     padding: 5px 5px 5px 5px;
 
-    width: 50%;
+    width: 45%;
     border-style: solid;
     border-width: 0.5px;
     overflow: hidden;
@@ -267,7 +267,15 @@ button:hover {
   }
 
   .hiddenInfo {
-    /*width: 50%;*/
+    padding-left: 10px;
+    margin-top: 20px;
+    margin-left: 20px;
+
+    border-style: solid;
+    border-width: 1px;
+  }
+
+  .hiddenChange {
     padding-left: 10px;
     margin-top: 20px;
     margin-left: 20px;

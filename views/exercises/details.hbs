@@ -1,6 +1,9 @@
 {{#if exercise_error}}
   <h2>{{exercise_error}}</h2>
 {{else}}
+{{#if compile_error}}
+  <h2>{{{compile_error}}}</h2>
+{{/if}}
 
   {{#if exercise}}
 
@@ -9,28 +12,38 @@
       <div id='div_png'>
         <img class='latexcode_png' src={{exercise.png}}>
       </div>
-      <p>Tags: {{#each exercise.tags}}{{this}} {{/each}}</p>
+      <p>Tags: {{#if exercise.tags}}
+        {{#each exercise.tags}}[{{this}}] {{/each}}
+        {{else}}none{{/if}}</p>
       <p>Author: {{exercise.author}}</p>
       <br>
       <button onclick='showHidden("hiddenSourceCode")' id='showHiddenButton'>Show Source Code</button>
 
       <div class='tooltip'>
-        <button onclick='copyToClipboard("#code_solpackages")' onmouseout='outFunc("#code_solpackages")' id='copyToClipboardButton'>
-          <span class="tooltiptext" id="#code_solpackages_myTooltip">Copy to clipboard</span>
-          Copy Packages
+        <button onclick='copyToClipboard("#code_all_packages")' onmouseout='outFunc("#code_all_packages")' id='copyToClipboardButton'>
+          <span class="tooltiptext" id="#code_all_packages_myTooltip">Copy to Clipboard</span>
+          Copy all Packages
         </button>
       </div>
 
       <div class='tooltip'>
-        <button onclick='copyToClipboard("#code_solution")' onmouseout='outFunc("#code_solution")' id='copyToClipboardButton'>
-          <span class="tooltiptext" id="#code_solution_myTooltip">Copy to clipboard</span>
+        <button onclick='copyToClipboard("#code_unique_packages")' onmouseout='outFunc("#code_unique_packages")' id='copyToClipboardButton'>
+          <span class="tooltiptext" id="#code_unique_packages_myTooltip">Copy to Clipboard</span>
+          Copy unique Packages
+        </button>
+      </div>
+
+      <div class='tooltip'>
+        <button onclick='copyToClipboard("#code_exercise")' onmouseout='outFunc("#code_exercise")' id='copyToClipboardButton'>
+          <span class="tooltiptext" id="#code_exercise_myTooltip">Copy to Clipboard</span>
           Copy Exercise
         </button>
       </div>
 
       <div id='hiddenSourceCode' class='hiddenInfo' style='display: none'>
-        <code><pre id='code_solpackages'>{{exercise.packages}}</pre></code>
-        <code><pre id='code_solution'>{{exercise.code}}</pre></code>
+        <code><pre id='code_all_packages'>{{exercise.all_packages}}</pre></code>
+        <code><pre id='code_unique_packages' style='display: none'>{{exercise.unique_packages}}</pre></code>
+        <code><pre id='code_exercise'>{{exercise.code}}</pre></code>
       </div>
       <br>
       <br>
@@ -60,22 +73,30 @@
             <button onclick='showHidden("hiddenSourceCode_Solution")' id='showHiddenButton'>Show Source Code</button>
 
             <div class='tooltip'>
-              <button onclick='copyToClipboard("#code_packages")' onmouseout='outFunc("#code_packages")' id='copyToClipboardButton'>
-                <span class="tooltiptext" id="#code_packages_myTooltip">Copy to clipboard</span>
-                Copy Packages
+              <button onclick='copyToClipboard("#code_all_solpackages")' onmouseout='outFunc("#code_all_solpackages")' id='copyToClipboardButton'>
+                <span class="tooltiptext" id="#code_all_solpackages_myTooltip">Copy to clipboard</span>
+                Copy all Packages
               </button>
             </div>
 
             <div class='tooltip'>
-              <button onclick='copyToClipboard("#code_exercise")' onmouseout='outFunc("#code_exercise")' id='copyToClipboardButton'>
-                <span class="tooltiptext" id="#code_exercise_myTooltip">Copy to clipboard</span>
-                Copy Exercise
+              <button onclick='copyToClipboard("#code_unique_solpackages")' onmouseout='outFunc("#code_unique_solpackages")' id='copyToClipboardButton'>
+                <span class="tooltiptext" id="#code_unique_solpackages_myTooltip">Copy to clipboard</span>
+                Copy unique Packages
               </button>
             </div>
 
-            <div id='hiddenSourceCode_Solution' class='hiddenInfo' style='display: none'>
-              <code><pre id='code_packages'>{{solution.packages}}</pre></code>
-              <code><pre id='code_exercise'>{{solution.code}}</pre></code>
+            <div class='tooltip'>
+              <button onclick='copyToClipboard("#code_solution")' onmouseout='outFunc("#code_solution")' id='copyToClipboardButton'>
+                <span class="tooltiptext" id="#code_solution_myTooltip">Copy to clipboard</span>
+                Copy Solution
+              </button>
+            </div>
+
+            <div id='hiddenSourceCode_Solution' class='hiddenInfo' style='display: none; width: 90%'>
+              <code><pre id='code_all_solpackages'>{{solution.all_packages}}</pre></code>
+              <code><pre id='code_unique_solpackages' style='display: none'>{{solution.unique_packages}}</pre></code>
+              <code><pre id='code_solution'>{{solution.code}}</pre></code>
             </div>
             <br>
             <br>

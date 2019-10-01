@@ -28,7 +28,13 @@ router.get('/id/:exercise_id', function(req, res, next) {
         public_id: exercise.public_id,
         name: exercise.name,
         png: exercise.png,
-        packages: exercise.packages,
+        all_packages: '\\usepackage[utf8]{inputenc}\n'
+                      +'\\usepackage{amsmath}\n'
+                      +'\\usepackage{amsthm}\n'
+                      +'\\usepackage{amssymb}\n'
+                      +'\\usepackage[ngerman]{babel}\n'
+                      +exercise.packages,
+        unique_packages: exercise.packages,
         code: exercise.code,
         tags: exercise.tags,
         author: exercise.author,
@@ -41,30 +47,36 @@ router.get('/id/:exercise_id', function(req, res, next) {
           public_exercise.same_name_check = true;
         } else {public_exercise.same_name_check = false;}
       }
-      if (public_exercise.allowed == true && (exercise.solution_id != null && exercise.solution_id != '')) {
+      if (public_exercise.allowed == true && exercise.solution_id != null) {
         Solutions.findOne( { public_id: exercise.solution_id }, async function(err, solution) {
           if (err) {
             await db_my.tagList(req);
-            res.render('exercises/details', {solution_error: 'ERROR: There was no solution found, but there should be one.',
-                                            exercise: public_exercise, tagList: req.session.taglist});
+            res.render('exercises/details', {solution_error: 'ERROR: There was no solution found, but there should be one. MESSAGE: '+err,
+                                            exercise: public_exercise, tagList: req.session.taglist,});
           }
           public_solution = {
             png: solution.png,
-            packages: solution.packages,
+            all_packages: '\\usepackage[utf8]{inputenc}\n'
+                          +'\\usepackage{amsmath}\n'
+                          +'\\usepackage{amsthm}\n'
+                          +'\\usepackage{amssymb}\n'
+                          +'\\usepackage[ngerman]{babel}\n'
+                          +solution.packages,
+            unique_packages: solution.packages,
             code: solution.code,
             author: solution.author,
           }
-          await db_my.tagList(req);
-          res.render('exercises/details', {exercise: public_exercise, solution: public_solution, 
-                                          tagList: req.session.taglist});
+          //await db_my.tagList(req);
+          res.render('exercises/details', {exercise: public_exercise, solution: public_solution,
+                                          compile_error: req.session.compile_error,});
+          req.session.compile_error = null;
         })
       } else {
-        if (exercise.solution_id == null || exercise.solution_id == '') {
+        if (exercise.solution_id == null) {
           solution_unavailable = true;
         } else {solution_unavailable = false;}
-        await db_my.tagList(req);
-        res.render('exercises/details', {exercise: public_exercise, tagList: req.session.taglist,
-                                          solution_unavailable: solution_unavailable});
+        //await db_my.tagList(req);
+        res.render('exercises/details', {exercise: public_exercise, solution_unavailable: solution_unavailable});
       }
     }
   });
@@ -76,7 +88,7 @@ router.post('/edit_details', function(req,res,next) {
     if (err) res.render('exercises/details', {exercise_error: 'ERROR: Exercise not found!'});
     else {
       public_exercise = {
-        public_id: 'id/'+exercise.public_id,
+        public_id: exercise.public_id,
         name: exercise.name,
         png: exercise.png,
         packages: exercise.packages,
@@ -89,10 +101,34 @@ router.post('/edit_details', function(req,res,next) {
           public_exercise.same_name_check = true;
         } else {public_exercise.same_name_check = false;}
       }
-      await db_my.tagList(req);
-      res.render('exercises/edit_details', {exercise: public_exercise, taglist: req.session.taglist});
+      if (exercise.solution_id != null) {
+        Solutions.findOne( { public_id: exercise.solution_id }, async function(err, solution) {
+          if (err) {
+            await db_my.tagList(req);
+            res.render('exercises/details', {solution_error: 'ERROR: There was no solution found, but there should be one. MESSAGE: '+err,
+                                            exercise: public_exercise, taglist: req.session.taglist});
+          }
+          public_solution = {
+            png: solution.png,
+            packages: solution.packages,
+            code: solution.code,
+            author: solution.author,
+            public_id: solution.public_id,
+          }
+          await db_my.tagList(req);
+          res.render('exercises/edit_details', {exercise: public_exercise, solution: public_solution, 
+                                                taglist: req.session.taglist});
+        })
+      } else {
+        await db_my.tagList(req);
+        res.render('exercises/edit_details', {exercise: public_exercise, taglist: req.session.taglist});
+      }
     }
   });
+});
+
+router.post('/redirect_back', function(req,res,next) {
+  res.redirect('/exercises/id/'+req.body.hidden_id);
 });
 
 
@@ -106,16 +142,75 @@ router.post('/change_tags', async function(req,res,next) {
 });
 
 
+router.post('/change_exercise', function(req,res,next) {
+  Exercises.findOne( { public_id: req.body.hidden_id }, function(err, db_exercise) {
+    if (err) {
+      req.session.compile_error = 'Something went wrong.';
+      res.redirect('/exercises/id/'+req.body.hidden_id);
+    }
+    db_exercise.packages = req.body.changed_packages;
+    db_exercise.code = req.body.changed_code;
+    my.final_compile(req.body.changed_packages,req.body.changed_code, function(final_compile_error, base64png) {
+      if (final_compile_error) {
+        req.session.compile_error = 'ERROR while compiling changed code:<br>Message: '+final_compile_error;
+        res.redirect('/exercises/id/'+req.body.hidden_id);
+      } else {
+        //console.log(util.inspect(req.body.exercise_latexcode, false, null, true))
+        db_exercise.png = base64png;
+
+        db_exercise.save((err) => {
+          if (err) {
+            req.session.compile_error = 'Something went wrong when saving changes. Maybe try again.';
+            res.redirect('/exercises/id/'+req.body.hidden_id);
+          }
+          req.session.compile_error = 'Changes saved!';
+          res.redirect('/exercises/id/'+req.body.hidden_id);
+        });
+      }
+    });
+  });
+});
+
+
+router.post('/change_solution', function(req,res,next) {
+  Solutions.findOne( { public_id: req.body.hidden_solution_id }, function(err, db_solution) {
+    if (err) {
+      req.session.compile_error = 'Something went wrong.';
+      res.redirect('/exercises/id/'+req.body.hidden_id);
+    }
+    db_solution.packages = req.body.changed_packages;
+    db_solution.code = req.body.changed_code;
+    my.final_compile(req.body.changed_packages,req.body.changed_code, function(final_compile_error, base64png) {
+      if (final_compile_error) {
+        req.session.compile_error = 'ERROR while compiling changed code:<br>Message: '+final_compile_error;
+        res.redirect('/exercises/id/'+req.body.hidden_id);
+      } else {
+        //console.log(util.inspect(req.body.exercise_latexcode, false, null, true))
+        db_solution.png = base64png;
+
+        db_solution.save((err) => {
+          if (err) {
+            req.session.compile_error = 'Something went wrong when saving changes. Maybe try again.';
+            res.redirect('/exercises/id/'+req.body.hidden_id);
+          }
+          req.session.compile_error = 'Changes saved!';
+          res.redirect('/exercises/id/'+req.body.hidden_exercise_id);
+        });
+      }
+    });
+  });
+});
+
+
 router.post('/delete', function(req, res, next) {
-  hidden_id = req.body.hidden_id.slice(3);
-  Exercises.findOne( { public_id: hidden_id }, function(err, db_exercise) {
+  Exercises.findOne( { public_id: req.body.hidden_id }, function(err, db_exercise) {
     if (err) throw err;
     if (db_exercise.solution_id) {
       Solutions.deleteOne( {public_id: db_exercise.solution_id}, function(solerr, db_solution) {
         if (solerr) throw solerr;
       });
     }
-    Exercises.deleteOne( { public_id: hidden_id }, function(err, deleted_element){
+    Exercises.deleteOne( { public_id: req.body.hidden_id }, function(err, deleted_element){
       if (err) throw err;
       res.render('exercises/delete_successful', {deleted_exercise_name: deleted_element.name});
     })

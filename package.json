@@ -19,7 +19,7 @@
     "lodash": "^4.17.11",
     "mongoose": "^5.4.19",
     "morgan": "^1.9.1",
-    "npm": "^6.9.0",
+    "npm": "^6.11.3",
     "passport": "^0.4.0",
     "passport-auth0": "^1.1.0",
     "pdf-image": "^2.0.0",

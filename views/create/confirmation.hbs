@@ -22,13 +22,15 @@
         <input type='hidden' name='solution_png_string' value='{{solution_png}}'>
       </div>
       <br><br><br><br>
-      <input type='hidden' name='solution_packages' value="{{solution_packages}}">
-      <input type='hidden' name='solution_latexcode' value="{{solution_latexcode}}">
+      <input type='hidden' name='solution_packages' value='{{solution_packages}}'>
+      <input type='hidden' name='solution_latexcode' value='{{solution_latexcode}}'>
     {{/if}}
-    <p>Selected Tags: {{#each tags}}'{{this}}' {{/each}}</p>
-    <input type='hidden' name='tagselect' value="{{tags}}">
-    <input type='hidden' name='exercise_packages' value="{{exercise_packages}}">
-    <input type='hidden' name='exercise_latexcode' value="{{exercise_latexcode}}">
+    <p>Selected Tags: {{#if tags}}
+        {{#each tags}}[{{this}}] {{/each}}
+        {{else}}none{{/if}}</p>
+    <input type='hidden' name='tagselect' value='{{tags}}'>
+    <input type='hidden' name='exercise_packages' value='{{exercise_packages}}'>
+    <input type='hidden' name='exercise_latexcode' value='{{exercise_latexcode}}'>
     
     <br><br><br>
     <input type='submit' value='Create exercise!'>
