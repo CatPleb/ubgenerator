@@ -9,10 +9,13 @@
     <div id='exercise_png' class='div_png'>
       <img class='latexcode_png' src={{exercise.png}}>
     </div>
-    <p>Solution:</p>
-    <div id='solution_png' class='div_png'>
-      <img class='latexcode_png' src={{solution.png}}>
-    </div><br><br>
+    {{#if solution}}
+      <p>Solution:</p>
+      <div id='solution_png' class='div_png'>
+        <img class='latexcode_png' src={{solution.png}}>
+      </div>
+    {{/if}}
+    <br><br>
     
     <p>Tags: {{#if exercise.tags}}
       {{#each exercise.tags}}[{{this}}] {{/each}}
