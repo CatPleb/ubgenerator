@@ -14,63 +14,102 @@ var Hierarchy = require('../lib/models/hierarchy_model');
 
 
 
+/* define function for accessing database in search of selected tags */
+var get_exercises = async function(selectedtag, headline_search, code_search) {
+
+  if (selectedtag && selectedtag.length) {
+    
+    var promises_tags = selectedtag.map(async function(stag) {
+      return Hierarchy.find({ name: stag });
+    });
+    
+    db_tags = await Promise.all(promises_tags);
+
+    newtagList = db_tags[0][0].subtree_tags;
+    for (i=1;i<db_tags.length;i++) {
+      newtagList = newtagList.filter(value => db_tags[i][0].subtree_tags.includes(value));
+    }
+
+    //result = await Exercises.find( { tags: { $in: newtagList }, name: { $regex: headline_search, $options: 'i'},
+    //                                 code: { $regex: code_search, $options: 'i'}});
+
+    if (headline_search && code_search) {
+      result = await Exercises.find({ tags: { $in: newtagList }, name: { $regex: headline_search, $options: 'i'},
+                                    code: { $regex: code_search, $options: 'i'}});
+    } else if (headline_search) {
+      result = await Exercises.find({ tags: { $in: newtagList }, name: { $regex: headline_search, $options: 'i'}});
+    } else if (code_search) {
+      result = await Exercises.find({ tags: { $in: newtagList }, code: { $regex: code_search, $options: 'i'}});
+    } else {
+      result = await Exercises.find({ tags: { $in: newtagList } });
+    }
+
+    var public_result = [];
+    for (i=0; i<result.length; i++) {
+
+      public_result.push({
+        name: result[i].name,
+        png: result[i].png,
+        tags: result[i].tags,
+        public_id: ('/exercises/id/'+result[i].public_id),
+      });
+
+    }
+    return public_result;
+ 
+  } else {
+    // selectedtag is undefined
+
+    if (headline_search && code_search) {
+      result = await Exercises.find({name: { $regex: headline_search, $options: 'i'},
+                                    code: { $regex: code_search, $options: 'i'}});
+    } else if (headline_search) {
+      result = await Exercises.find({name: { $regex: headline_search, $options: 'i'}});
+    } else if (code_search) {
+      result = await Exercises.find({code: { $regex: code_search, $options: 'i'}});
+    } else {
+      result = await Exercises.find();
+    }
+    var public_result = [];
+    for (i=0; i<result.length; i++) {
+
+      public_result.push({
+        name: result[i].name,
+        png: result[i].png,
+        tags: result[i].tags,
+        public_id: ('/exercises/id/'+result[i].public_id),
+      });
+      
+    }
+    return public_result;
+  }
+};
+
+
 /* show all exercises page */
 router.get('/', async function(req, res, next) {
   var selectedtag = my.convert2array(req.query.selecttag);
 
   // create a list with all possible tags
-  await db_my.tagList(req);
-  
-  if (selectedtag == undefined) {
-    res.render('search/search', {taglist: req.session.taglist});
-  } else if (selectedtag.indexOf('All') >= 0) {
+  if (!(req.session.taglist)) await db_my.tagList(req, selectedtag);
 
-    Exercises.find().then(function(result) {
-      var public_result = [];
-          for (i=0; i<result.length; i++) {
-
-            public_result.push({
-              name: result[i].name,
-              png: result[i].png,
-              tags: result[i].tags,
-              public_id: ('/exercises/id/'+result[i].public_id),
-            });
-            
-          }
-          res.render('search/search', {result: public_result, taglist: req.session.taglist, selectedtag: selectedtag});
-    })
-
-  } else if (selectedtag) {
-    var promises_tags = selectedtag.map(async function(stag) {
-      return Hierarchy.find({ name: stag });
-    });
+  newtaglist = []
+  for (i=0;i<req.session.taglist.length;i++) {
     
-    Promise.all(promises_tags).then((db_tags) => {
-      
-      newtagList = []
-      for (i=0;i<db_tags.length;i++) {
-        newtagList = newtagList.concat(db_tags[i][0].subtree_tags);
-      }
-
-      Exercises.find( { tags: { $in: newtagList }}, function(err,result) {
-
-        var public_result = [];
-        for (i=0; i<result.length; i++) {
-
-          public_result.push({
-            name: result[i].name,
-            png: result[i].png,
-            tags: result[i].tags,
-            public_id: ('/exercises/id/'+result[i].public_id),
-          });
-
-        }
-        res.render('search/search', {result: public_result, taglist: req.session.taglist, selectedtag: selectedtag});
-      });
-    });     
-  } else {
-    res.render('search/search', {taglist: req.session.taglist});
+    if (selectedtag.includes(req.session.taglist[i])) {
+      newtaglist.push({ tag: req.session.taglist[i], selected: true });
+    } else {
+      newtaglist.push({ tag: req.session.taglist[i] });
+    }
   }
+
+
+  public_result = await get_exercises(selectedtag, req.query.headline_search, req.query.code_search);
+  
+  if (!(selectedtag && selectedtag.length)) selectedtag = 'All';
+  res.render('search/search', {result: public_result, taglist: newtaglist, selectedtag: selectedtag,
+                              headline_search: req.query.headline_search, code_search: req.query.code_search});
+  
 });
 
 

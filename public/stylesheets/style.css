@@ -242,6 +242,10 @@ button:hover {
   }
 
 /* search ... */
+  div#div_search {
+    border: 2px solid;
+    padding: 5px;
+  }
 
   div.search_result_exercise {
     border-left: 6px solid #4fdbf7;

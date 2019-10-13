@@ -2,13 +2,18 @@
 <div id='div_search'>
   <form action='/search' method='get'>
     
+    Tags:
     <select class='mainselect' name='selecttag' multiple='multiple'>
-        <option value='All'>All</option>
       {{#each taglist}}
-        <option value='{{this}}'>{{this}}</option>
+        <option value='{{this.tag}}' {{#if this.selected}}selected{{/if}}>{{this.tag}}</option>
       {{/each}}
     </select>
-    Press Tab -> Enter for fast searching!
+    <br><br>
+    Headline:
+    <input type='text' id='headline_search' name='headline_search' style='margin-left: 5px; width: 35%' value='{{headline_search}}'>
+    <br><br>
+    Text:
+    <input type='text' id='code_search' name='code_search' style='margin-left: 35px; width: 35%' value='{{code_search}}'>
     <br><br>
     <input type='submit' value='Search!'>
   </form>
@@ -16,7 +21,6 @@
 
 {{#if selectedtag}}
 <div id='search_result'>
-  <h3>Results for tags: "{{selectedtag}}"</h3>
   {{#each result}}
     <div class='search_result_exercise'>
       <p><b>{{this.name}}</b></p>
