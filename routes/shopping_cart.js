@@ -54,11 +54,16 @@ router.get('/create_latex_doc', async function(req,res,next) {
   codeString = '';
   for (i in exercisesArray) {
     packageString = packageString + '\n' + exercisesArray[i].packages
-    codeString = codeString + '\n' + exercisesArray[i].code
+    codeString = codeString + '\n\n' + exercisesArray[i].code
     console.log(i, exercisesArray[i].packages);
     console.log(i, exercisesArray[i].code);
   }
-  full_doc = '\\documentclass{article}\n' + 
+  full_doc = '\\documentclass{article}\n' +
+              '\\usepackage[utf8]{inputenc}\n' +
+              '\\usepackage{amsmath}\n' +
+              '\\usepackage{amsthm}\n' +
+              '\\usepackage{amssymb}\n' +
+              '\\usepackage[ngerman]{babel}' +
               packageString + '\n\n' +
               '\\begin{document}\n' +
               codeString + '\n\n' +
