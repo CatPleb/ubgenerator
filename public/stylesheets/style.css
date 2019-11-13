@@ -4,324 +4,208 @@ html, body {
   padding: 0;
 }
 
-div#all {
-  margin-left: 0;
+/* Search Form in /search */
+#search_form{
+  padding: 20px;
+  padding-bottom: 0px;
+  margin-bottom: 30px;
+  
+  border-style: solid;
+  border-width: 1px;
 }
 
-/* TOP NAVIGATION MENU, source: w3schools.com/howto... */
 
-  .topnav {
-    background-color: #333;
-    overflow: hidden;
-
-    position: fixed;
-    top: 0;
-    left: 40px;
-    z-index: 10;
-  }
-
-  /* Style the links inside the navigation bar */
-  .topnav a {
-    float: left;
-    color: #f2f2f2;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-size: 17px;
-  }
-
-  /* Change the color of links on hover */
-  .topnav a:hover {
-    background-color: #ddd;
-    color: black;
-  }
-
-  /* Same as topnav but for login/logout/profile top right */
-  .usernav {
-    background-color: #333;
-    overflow: hidden;
-
-    position: fixed;
-    top: 0;
-    right: 30px;
-    z-index: 10;
-  }
-
-  .usernav a {
-    float: right;
-    color: #f2f2f2;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-size: 17px;
-  }
-
-  .usernav a:hover {
-    background-color: #ddd;
-    color: black;
-  }
-
-  /* Add a color to the active/current link */
-  .topnav a.active {
-    background-color: #4fdbf7;
-    color: white;
-  }
-
-
-
-
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
-
-a {
-  color: #00B7FF;
-}
-
-section {
-  float: left;
-  background: #bdc3c7;
-  padding: 10px;
-  margin: 30px;
-  width: 300px;
-  box-shadow: 3px 3px 1px #34495e;
-  min-height: 400px;
-}
-
-section h3 {
-  border-bottom: 1px solid black;
-  padding-bottom: 5px;
-}
-
-.input label {
-  display: block;
-  font-weight: bold;
-  padding: 2px 0;
-}
-
-input,
-button {
-  font: inherit;
-}
-
-button {
-  margin-top: 10px;
-  border: none;
-  box-shadow: 1px 1px 1px #34495e;
-  border-radius: 0;
-  background: #ecf0f1;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #bdc3c7;
+/* bootstrap stuff */
+.col-centered{
+  float: none;
+  margin: 0 auto;
 }
 
 
 /* /create... */
-  #main_form {
-    border-style: dotted;
-  }
+#main_form {
+  border-style: dotted;
+}
 
-  textarea.input {
-    white-space: pre;
-    width: 100%;
-    resize: none;
-  }
+textarea.input {
+  white-space: pre;
+  width: 100%;
+  resize: none;
+}
 
-  div#exercise {
-    height: 850px;
-  }
+div#exercise {
+  height: 850px;
+}
 
-  div#exercise_input {
-    width: 45%;
-  }
+div#exercise_input {
+  width: 45%;
+}
 
-  #exercise_output {
-    position: relative;
-    width: 52%;
-    height: 750px;
-    bottom: 750px;
-    left: 48%;
-    padding-left: 5px;
-    padding-right: 5px;
+#exercise_output {
+  position: relative;
+  width: 52%;
+  height: 750px;
+  bottom: 750px;
+  left: 48%;
+  padding-left: 5px;
+  padding-right: 5px;
 
-    border-style: solid;
-    border-width: 0.5px;
-  }
+  border-style: solid;
+  border-width: 0.5px;
+}
 
-  h3#exercise_outputtext {
-    padding-left: 20px;
-  }
+h3#exercise_outputtext {
+  padding-left: 20px;
+}
 
-  .latexcode_png {
-    max-width: 100%;
-    max-height: 93%;
-  }
+.latexcode_png {
+  max-width: 100%;
+  max-height: 93%;
+}
 
-  div#solution {
-    position: relative;
-    top: -50px;
-    height: 950px;
-  }
+div#solution {
+  position: relative;
+  top: 200px;
+  height: 950px;
+}
 
-  div#solution_input {
-    width: 45%;
-  }
+div#solution_input {
+  width: 45%;
+}
 
-  #solution_output {
-    position: relative;
-    width: 52%;
-    height: 800px;
-    bottom: 700px;
-    left: 48%;
-    padding-left: 5px;
-    padding-right: 5px;
+#solution_output {
+  position: relative;
+  width: 52%;
+  height: 800px;
+  bottom: 700px;
+  margin-top: -100px;
+  left: 48%;
+  padding-left: 5px;
+  padding-right: 5px;
 
-    border-style: solid;
-    border-width: 0.5px;
-  }
+  border-style: solid;
+  border-width: 0.5px;
+}
 
-  h3#solution_outputtext {
-    padding-left: 20px;
-  }
+h3#solution_outputtext {
+  padding-left: 20px;
+}
 
-  p.errorp {
-    padding-left: 20px;
-  }
+p.errorp {
+  padding-left: 20px;
+}
 
-  img#latexcode_png {
-    padding-left: 20px;
-    padding-right: 20px;
-    max-width: 90%;
-    max-height: 90%;
-  }
+img#latexcode_png {
+  padding-left: 20px;
+  padding-right: 20px;
+  max-width: 90%;
+  max-height: 90%;
+}
 
-  .div_png {
-    padding: 5px 5px 5px 5px;
+.div_png {
+  padding: 5px 5px 5px 5px;
 
-    width: 45%;
-    border-style: solid;
-    border-width: 0.5px;
-    overflow: hidden;
-  }
+  width: 45%;
+  border-style: solid;
+  border-width: 0.5px;
+  overflow: hidden;
+}
 
-  div#select {
-    position: relative;
-    bottom: 150px;
-    width: 2000px;
-  }
+div#select {
+  position: relative;
+  top: 250px;
+  width: 2000px;
+}
 
-  .nice_blue_submits {
-    position: relative;
+.nice_black_buttons {
+  position: relative;
 
-    background-color: #4fdbf7;
-    color: white;
-    border: solid;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    cursor: pointer;
-  }
+  background-color: #4fdbf7;
+  color: white;
+  border: none;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 18px;
+  cursor: pointer;
+}
 
-  .nice_black_buttons {
-    position: relative;
 
-    background-color: #4fdbf7;
-    color: white;
-    border: none;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 18px;
-    cursor: pointer;
-  }
 
-/* search ... */
-  div#div_search {
-    border: 2px solid;
-    padding: 5px;
-  }
 
-  div.search_result_exercise {
-    border-left: 6px solid #4fdbf7;
-    padding-left: 10px;
-  }
+/* General exercise png visuals */
+/* .div_png {
+  padding: 5px 5px 5px 5px;
 
-  img.search_result_png {
-    width: 600px;
-    max-width: 80%;
+  width: 45%;
+  border-style: solid;
+  border-width: 0.5px;
+  overflow: hidden;
+}
 
-    border-left: 3px solid lightgray;
-    padding-left: 10px;
-  }
-
-  .mainselect {
-    width: 40%;
-  }
+.latexcode_png {
+  max-width: 100%;
+  max-height: 93%;
+} */
 
 /* /exercises... */
+button#copyToClipboardButton {
+  margin-left: 10px;
+}
 
-  button#copyToClipboardButton {
-    margin-left: 10px;
-  }
+.hiddenInfo {
+  padding-left: 10px;
+  margin-top: 20px;
+  margin-left: 20px;
 
-  .hiddenInfo {
-    padding-left: 10px;
-    margin-top: 20px;
-    margin-left: 20px;
+  border-style: solid;
+  border-width: 1px;
+}
 
-    border-style: solid;
-    border-width: 1px;
-  }
+.hiddenChange {
+  padding-left: 10px;
+  margin-top: 20px;
+  margin-left: 20px;
 
-  .hiddenChange {
-    padding-left: 10px;
-    margin-top: 20px;
-    margin-left: 20px;
+  border-style: solid;
+  border-width: 1px;
+}
 
-    border-style: solid;
-    border-width: 1px;
-  }
+.my_tooltip {
+  position: relative;
+  display: inline-block;
+}
 
-  .tooltip {
-    position: relative;
-    display: inline-block;
-  }
+.my_tooltip .tooltiptext {
+  visibility: hidden;
+  width: 140px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -75px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
 
-  .tooltip .tooltiptext {
-    visibility: hidden;
-    width: 140px;
-    background-color: #555;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px;
-    position: absolute;
-    z-index: 1;
-    bottom: 100%;
-    left: 50%;
-    margin-left: -75px;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  
-  .tooltip .tooltiptext::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #555 transparent transparent transparent;
-  }
-  
-  .tooltip:hover .tooltiptext {
-    visibility: visible;
-    opacity: 1;
-  }
+.my_tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}

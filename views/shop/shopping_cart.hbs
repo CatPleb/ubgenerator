@@ -1,0 +1,41 @@
+{{#if exercises}}
+  <div class='row'>
+    <div class="col-centered">
+      <h2>Exercise Sheet Creator</h2>
+      <ul class="list-group">
+        {{#each exercises}}
+          <div class="card" style="width: 40rem;">
+            <div class="card-body">
+              <p class="card-title"><b>{{this.name}}</b></p>
+              <img src="{{this.png}}" class="img-thumbnail" alt="exercise">
+              <p class="card-text" style='margin-top:3px; color:#7f7f7f;'>{{#if this.tags}}
+                {{#each this.tags}}[{{this}}] {{/each}}
+                {{else}}none{{/if}}</p>
+              <a href="/exercises/id/{{this.public_id}}" class="btn btn-primary btn-sm">Show Exercise details page</a>
+              <a href='/remove-from-cart/{{this.public_id}}' class='btn btn-primary float-right btn-sm' role='button'>Remove Exercise</a>
+            </div>
+          </div>
+        {{/each}}
+      </ul>
+    </div>
+  </div>
+  
+  <div class='row'>
+    <div class='col'>
+      <strong>Total: <span class='badge badge-secondary'>{{totalQty}}</span> Exercises</strong>
+      <a href='/remove-all-from-cart' class='btn btn-primary float-right btn-sm' role='button'>Remove all Exercises</a>
+    </div>
+  </div>
+  <hr>
+  <div class='row'>
+    <div class='col'>
+      <a href='/create_latex_doc' class='btn btn-primary btn-lg' role='button'>Create LaTeX Document!</a>
+    </div>
+  </div>
+{{else}}
+  <div class='row'>
+    <div class='col'>
+      <h2>No Items in Cart</h2>
+    </div>
+  </div>
+{{/if}}

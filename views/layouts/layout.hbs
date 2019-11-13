@@ -5,100 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>{{ title }}</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel='stylesheet' href='/stylesheets/style.css'>
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css"/>
+  
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 </head>
 
 <body>
-<div id='all'>
+{{> header }}
 
-  <div id='black_bar'></div>
-  
-  <div class="topnav">
-    <a id='a' href="/">Uebomat - v0.5.0</a>
-    <a id='b' href="/search">Search</a>
-    <a id='c' href="/create">Create</a>
-    <a id='d' href="/about">About</a>
-    <a id='e' href="/contact">Contact</a>
-    <a id='f' href='/privacy'>Privacy Policy</a>
-    <a id='tuk_imprint_link' href='https://www.uni-kl.de/en/imprint/' target='_blank'>Imprint</a>
-    <a id='github_link' href='https://github.com/CatPleb/ubgenerator' target='_blank'>GitHub</a>
-  </div> 
-
-
-  <div class='usernav'>
-    {{#if user}}
-      <a id='logout' href='/logout'>Log Out</a>
-      <a id='profile' href='/user'>{{user.nickname}}</a>
-    {{else}}
-      <a id='login' href='/login'>Log In</a>
-    {{/if}}
+  <div class='container'>
+    <br><br><br>
+    {{{ body }}}
   </div>
 
 
-  {{{ body }}}
 
-
-</div>
   <script>
-
+    
     /* Changes the highlighted top navigation symbol according to the site the user is on */
-    const b = '/search';
-    const c = '/create';
-    const d = '/about';
-    const e = '/contact';
-    const f = '/privacy';
     if (window.location.pathname == '/') {
-      document.getElementById('a').className = 'active';
-
-      document.getElementById('b').className = '';
-      document.getElementById('c').className = '';
-      document.getElementById('d').className = '';
-      document.getElementById('e').className = '';
-      document.getElementById('f').className = '';
-    } else if (window.location.pathname.indexOf(b) != -1 || window.location.pathname.indexOf('/exercises') != -1) {
-      document.getElementById('b').className = 'active';
-
-      document.getElementById('a').className = '';
-      document.getElementById('c').className = '';
-      document.getElementById('d').className = '';
-      document.getElementById('e').className = '';
-      document.getElementById('f').className = '';
-    } else if (window.location.pathname.indexOf(c) != -1) {
-      document.getElementById('c').className = 'active';
-
-      document.getElementById('a').className = '';
-      document.getElementById('b').className = '';
-      document.getElementById('d').className = '';
-      document.getElementById('e').className = '';
-      document.getElementById('f').className = '';
-    } else if (window.location.pathname.indexOf(d) != -1) {
-      document.getElementById('d').className = 'active';
-
-      document.getElementById('a').className = '';
-      document.getElementById('b').className = '';
-      document.getElementById('c').className = '';
-      document.getElementById('e').className = '';
-      document.getElementById('f').className = '';
-    } else if (window.location.pathname.indexOf(e) != -1) {
-      document.getElementById('e').className = 'active';
-
-      document.getElementById('a').className = '';
-      document.getElementById('b').className = '';
-      document.getElementById('c').className = '';
-      document.getElementById('d').className = '';
-      document.getElementById('f').className = '';
-    } else if (window.location.pathname.indexOf(f) != -1) {
-      document.getElementById('f').className = 'active';
-
-      document.getElementById('a').className = '';
-      document.getElementById('b').className = '';
-      document.getElementById('c').className = '';
-      document.getElementById('d').className = '';
-      document.getElementById('e').className = '';
+      document.getElementById('a').className += ' active';
+    } else if (window.location.pathname.indexOf('/search') != -1 || window.location.pathname.indexOf('/exercises') != -1) {
+      document.getElementById('b').className += ' active';
+    } else if (window.location.pathname.indexOf('/create') != -1) {
+      document.getElementById('c').className += ' active';
+    } else if (window.location.pathname.indexOf('/about') != -1) {
+      document.getElementById('navbarDropdown_d').className += ' active';
+    } else if (window.location.pathname.indexOf('/contact') != -1) {
+      document.getElementById('navbarDropdown_d').className += ' active';
+    } else if (window.location.pathname.indexOf('/privacy') != -1) {
+      document.getElementById('navbarDropdown_e').className += ' active';
+    } else if (window.location.pathname.indexOf('/user') != -1) {
+      document.getElementById('navbarDropdown_f').className += ' active';
+    } else if (window.location.pathname.indexOf('/shopping_cart') != -1) {
+      document.getElementById('g').className += ' active';
     }
+
   </script>
 </body>
 </html>

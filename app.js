@@ -8,7 +8,8 @@ var bodyParser = require('body-parser');
 
 var exphbs = require('express-handlebars');
 var expressValidator = require('express-validator');
-var expressSession = require('express-session');
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 
 // Load environment variables from .env
 var dotenv = require('dotenv');
@@ -21,6 +22,13 @@ console.log(result.parsed);
 if (!((process.env.OPERATING_SYSTEM == 'windows') || (process.env.OPERATING_SYSTEM == 'linux'))) {
   throw new Error('CHANGE OPERATING_SYSTEM IN .env FILE TO YOUR OS.');
 }
+
+
+/* Mongoose connection */
+var mongoose = require('mongoose');
+mongoose.set('useUnifiedTopology', true);
+mongoose.connect(process.env.MONGOOSE_ADDRESSE, {useNewUrlParser: true});
+
 
 // Load Passport
 var passport = require('passport');
@@ -64,6 +72,7 @@ var exercisesRouter = require('./routes/exercises');
 var authRouter = require('./routes/auth');
 var usersRouter = require('./routes/users');
 var databaseRouter = require('./routes/database');
+var shoppingCartRouter = require('./routes/shopping_cart');
 
 var userInViews = require('./lib/middleware/userInViews');
 
@@ -79,16 +88,17 @@ app.set('view engine', 'hbs');
 // config express-session
 var sess = {
   secret: 'alldayeveryday123',
-  cookie: {},
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  cookie: { maxAge: 180*60*1000 }, // 180min
 };
 /* Needs https, not yet implemented!
 if (process.env.STATUS == 'production') {
   sess.cookie.secure = true; // serve secure cookies, requires https
 } */
 
-app.use(expressSession(sess));
+app.use(session(sess));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -103,6 +113,10 @@ app.use(expressValidator());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req,res,next) {
+  res.locals.session = req.session;
+  next();
+});
 
 app.use(userInViews());
 app.use('/', indexRouter);
@@ -113,6 +127,7 @@ app.use('/', authRouter);
 app.use('/', indexRouter);
 app.use('/', usersRouter);
 app.use('/database', databaseRouter);
+app.use('/', shoppingCartRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -10,10 +10,7 @@ var my = require('../lib/my modules/compile_code');
 var db_my = require('../lib/my modules/database_helper_functions');
 
 
-/* Mongoose stuff and models */
-var mongoose = require('mongoose');
-mongoose.connect(process.env.MONGOOSE_ADDRESSE, {useNewUrlParser: true});
-
+/* Mongoose models */
 var Exercises = require('../lib/models/exercises_model');
 var Solutions = require('../lib/models/solutions_model');
 

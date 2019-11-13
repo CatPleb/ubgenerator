@@ -1,4 +1,6 @@
 <h1>Latex Compiler</h1>
+<small>Visual overhaul for this page in progress</small>
+<br><br><br>
 
 <form action='/create/confirmation' method='post' id='codeform' autocomplete='off'>
 
@@ -6,6 +8,7 @@
     <div id='exercise_input'>
       <h4>Title:</h4>
       <input type='text' name='exercise_title' size='70%'>
+      <br><br>
       <h2>Input <u>Exercise</u></h2>
       <h4>LaTeX packages:</h4>
       <p>\usepackage[utf8]{inputenc}<br>
@@ -53,16 +56,16 @@
   </div>
 
   <div id='select'>
-  <p>Select the appropriate and most specific tags:</p>
-  <select class='mainselect' name='selected_tags' multiple='multiple'>
-    {{#each taglist}}
-      <option value='{{this}}'>{{this}}</option>
-    {{/each}}
-  </select>
+    <p>Select the appropriate and most specific tags:</p>
+    <select class='mainselect' name='selected_tags' multiple='multiple' style='width: 300px;'>
+      {{#each taglist}}
+        <option value='{{this}}'>{{this}}</option>
+      {{/each}}
+    </select>
   </div>
   <br>
 
-  <input type='submit' id='submit_button' class='nice_blue_submits' value='Submit Exercise'>
+  <button type='submit' class='btn btn-primary btn-lg' style='margin-top: 300px'>Submit Exercise</button>
 </form>
 
 

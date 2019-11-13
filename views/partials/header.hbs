@@ -1,0 +1,67 @@
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="/"><i class="fas fa-paste"></i> Übomat - v0.6.0</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/" id='a'><i class="fas fa-home"></i> Home</a>
+      </li>
+      <li class='nav-item'>
+        <a class="nav-link" href="/search" id='b'><i class="fas fa-search"></i> Search</a>
+      </li>
+      <li class='nav-item'>
+        <a class="nav-link" href="/create" id='c'><i class="far fa-plus-square"></i> Create</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown_d" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          The Project
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown_d">
+          <a class="dropdown-item" href="/about">About</a>
+          <a class="dropdown-item" href="/contact">Contact</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown_e" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Privacy
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown_e">
+          <a class="dropdown-item" href='/privacy'>Privacy Policy</a>
+          <a class="dropdown-item" href='https://www.uni-kl.de/en/imprint/' target='_blank'>Imprint</a>
+        </div>
+      </li>
+      <li nav-item>
+        <a class="nav-link" href='https://github.com/CatPleb/ubgenerator' target='_blank'><i class="fab fa-github"></i> GitHub</a>
+      </li>  
+    </ul>
+
+    <ul class="navbar-nav navbar-right">
+      {{#if user}}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown_f" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-user"></i> {{user.nickname}}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown_f">
+          <a class="dropdown-item" href="/user">Profile</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/logout">Log Out</a>
+        </div>
+      </li>
+      {{else}}
+      <li class="nav-item">
+        <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i> Log In</a>
+      </li>
+      {{/if}}
+      <li class="nav-item">
+        <a class="nav-link" href="/shopping_cart" id='g'>
+          <i class="fas fa-shopping-cart"></i>
+          <span class='badge badge-secondary'>{{session.cart.totalQty}}</span>
+           Shopping Cart
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>

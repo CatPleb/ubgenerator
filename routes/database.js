@@ -5,11 +5,9 @@ var router = express.Router();
 var my = require('../lib/my modules/compile_code');
 var myhelper = require('../lib/my modules/database_helper_functions');
 var util = require('util');
+var {spawn} = require('child_process');
 
-/* Mongoose stuff and models */
-var mongoose = require('mongoose');
-mongoose.connect(process.env.MONGOOSE_ADDRESSE, {useNewUrlParser: true});
-
+/* Mongoose models */
 var Exercises = require('../lib/models/exercises_model');
 var Hierarchy = require('../lib/models/hierarchy_model');
 
@@ -19,7 +17,20 @@ router.post('/', adminsecured(), async function(req, res, next) {
   res.render('database/db_index', {});
 });
 
-router.post('/overview_tags', adminsecured(), function(req,res,next) {
+router.post('/overview_tags', adminsecured(), async function(req,res,next) {
+  /*
+  console.log(1);
+  tagDB = await Hierarchy.find();
+  console.log(tagDB);
+  var process = spawn('C:/Users/mowol/Anaconda3/python.exe',["./lib/middleware/tagTree.py", 
+                            tagDB] );
+  process.stdout.on('data', function(data) { 
+    console.log(data.toString());
+  });
+  process.stderr.on('data', function(data) { 
+    console.log(data.toString());
+  });
+  */
   res.render('database/overview_tags', {})
 });
 

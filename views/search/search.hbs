@@ -1,46 +1,52 @@
-<br>
-<div id='div_search'>
-  <form action='/search' method='get'>
-    
-    Tags:
-    <select class='mainselect' name='selecttag' multiple='multiple'>
-      {{#each taglist}}
+<div class='col-centered clearfix' id='search_form'>
+  <form>
+    <div class='form-group form-row'>
+      <label for="tag_select" class="col-xl-1 col-4 col-form-label">Select Tag</label>
+      <select class="custom-select col-xl-11 col-8" id='tag_select' name='selecttag' multiple>
+        {{#each taglist}}
         <option value='{{this.tag}}' {{#if this.selected}}selected{{/if}}>{{this.tag}}</option>
-      {{/each}}
-    </select>
-    <br><br>
-    Headline:
-    <input type='text' id='headline_search' name='headline_search' style='margin-left: 5px; width: 35%' value='{{headline_search}}'>
-    <br><br>
-    Text:
-    <input type='text' id='code_search' name='code_search' style='margin-left: 35px; width: 35%' value='{{code_search}}'>
-    <br><br>
-    <input type='submit' value='Search!'>
+        {{/each}}
+      </select>
+    </div>
+    <div class="form-group form-row">
+      <label for="headline_search" class="col-xl-1 col-4 col-form-label">Headline</label>
+      <input type='text' class="form-control col-xl-11 col-8" id="headline_search" rows="2" value="{{headline_search}}" name='headline_search'></input>
+    </div>
+    <div class="form-group form-row">
+      <label for="code_search" class="col-xl-1 col-4 col-form-label">Text</label>
+      <input type='text' class="form-control col-xl-11 col-8" id="code_search" rows="2" value="{{code_search}}" name='code_search'></input>
+    </div>
+    <button type="submit" class="btn btn-primary" style='margin-bottom: 10px;'>Search!</button>
   </form>
 </div>
 
+
 {{#if selectedtag}}
 <div id='search_result'>
-  {{#each result}}
-    <div class='search_result_exercise'>
-      <p><b>{{this.name}}</b></p>
-      <div class='search_result_png_border'>
-        <img class='search_result_png' src={{this.png}}>
+
+  <div class='row'>
+    {{#each result}}
+      <div class="col-centered">
+        <div class="card" style="width: 33rem;">
+          <div class="card-body">
+            <p class="card-title" style='margin-bottom: 0px;'><b>{{this.name}}</b></p>
+            <img src="{{this.png}}" class="img-thumbnail" alt="exercise">
+            <p class="card-text" style='margin-top:3px; color:#7f7f7f;'>{{#if this.tags}}
+              {{#each this.tags}}[{{this}}] {{/each}}
+              {{else}}none{{/if}}</p>
+            <a href="/exercises/id/{{this.public_id}}" class="btn btn-primary btn-sm">Details</a>
+            <a href='/add-to-cart/{{this.public_id}}' class='btn btn-primary btn-sm float-right' role='button'><i class="fas fa-cart-plus"></i></a>
+          </div>
+        </div>
       </div>
-      <p>Tags: {{#if this.tags}}
-        {{#each this.tags}}[{{this}}] {{/each}}
-        {{else}}none{{/if}}</p>
-      <form action={{this.public_id}} method='get'>
-        <input type='submit' id='exercise_link' value='Details'>
-      </form>
-    </div>
-    <br>
-  {{/each}}
+    {{/each}}
+  </div>
 </div>
+<br><br><br><br>
 {{/if}}
 
 <script>
   $(document).ready(function() {
-      $('.mainselect').select2();
+      $('#tag_select').select2();
   });
 </script>

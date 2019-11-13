@@ -5,10 +5,8 @@ var my = require('../lib/my modules/compile_code');
 var db_my = require('../lib/my modules/database_helper_functions');
 var util = require('util');
 
-/* Mongoose stuff and models */
-var mongoose = require('mongoose');
-mongoose.connect(process.env.MONGOOSE_ADDRESSE, {useNewUrlParser: true});
 
+/* Mongoose models */
 var Exercises = require('../lib/models/exercises_model');
 var Hierarchy = require('../lib/models/hierarchy_model');
 
@@ -51,7 +49,7 @@ var get_exercises = async function(selectedtag, headline_search, code_search) {
         name: result[i].name,
         png: result[i].png,
         tags: result[i].tags,
-        public_id: ('/exercises/id/'+result[i].public_id),
+        public_id: result[i].public_id,
       });
 
     }
@@ -77,7 +75,7 @@ var get_exercises = async function(selectedtag, headline_search, code_search) {
         name: result[i].name,
         png: result[i].png,
         tags: result[i].tags,
-        public_id: ('/exercises/id/'+result[i].public_id),
+        public_id: result[i].public_id,
       });
       
     }
